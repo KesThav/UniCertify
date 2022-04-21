@@ -8,6 +8,9 @@ import themeSheet from "./util/theme";
 import { ContextAPI } from "./Middlewares/ContextAPI";
 import { Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing";
+import CssBaseline from "@mui/material/CssBaseline";
+import Navbar from './Components/Navbar'
+import Certificates from './Pages/Certificates'
 
 const theme = createTheme(themeSheet);
 
@@ -17,10 +20,12 @@ const App = (props) => {
   const [account, setAccount] = useState(null);
   const [networkId, setNetwork] = useState(null);
   const [myContract, setContract] = useState(null);
+  const [data,updateData] = useState(null);
   const [alert, setAlert] = useState({
-    visible: false,
-    color: "info",
-    text: "",
+    visible: true,
+    title: "Valid certificate",
+    color: "success",
+    text: "http://localhost:3000/certificates/examples",
   });
 
   useEffect(() => {
@@ -63,18 +68,47 @@ const App = (props) => {
 
   const getData = () => {
     if (myContract) {
-      myContract.methods
+     myContract.methods
         .getData()
         .call()
-        .then((result) => console.log(result));
+        .then(result => console.log(result))
+  };
+}
+
+  const getData2 = async () => {
+    try {
+      if(myContract){
+
+     
+      const res = await myContract.methods.getData().call()
+      const temp =
+        res &&
+        res.map((data) => {
+          return {
+            name: data.name,
+            surname: data.surname
+          };
+        });
+      updateData(temp);
+    } } catch (err) {
+      console.log(err);
     }
   };
 
+  const verifyToken = (e) => {
+    e.preventDefault();
+    getData();
+    console.log(data)
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <ContextAPI.Provider value={{ getData }}>
+      <ContextAPI.Provider value={{ getData,verifyToken,data,count,setCount,alert}}>
+        <Navbar/>
+      <CssBaseline />
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/certificates/:certifid" element={<Certificates/>} />
           </Routes>
       </ContextAPI.Provider>
     </ThemeProvider>

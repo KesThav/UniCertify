@@ -1,4 +1,4 @@
-import { padding } from "@mui/system";
+import { padding, textTransform } from "@mui/system";
 
 const theme = {
     components: {
@@ -9,10 +9,9 @@ const theme = {
               style: {
                 boxShadow: "none",
                 fontSize: "1.2rem",
-                paddingTop: "20px",
-                paddingBottom: "20px",
                 marginBottom: "5px",
-                fontFamily : `"Roboto", "Helvetica", "Arial", sans-serif`,
+                fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
+                textTransform: "none",
                 "&:hover": {
                   boxShadow:"none",
                 }
@@ -23,15 +22,34 @@ const theme = {
               style: {
                 boxShadow: "none",
                 backgroundColor: "#256e96",
-                paddingTop: "20px",
-                paddingBottom: "20px",
+                paddingTop: "15px",
+                paddingBottom: "15px",
                 "&:hover":{
                     backgroundColor: "#899966"
                 }
               },
             },
+            {
+              props: {variant: "text"},
+              style:{
+                fontSize: "1.2rem",
+                textTransform: "none",
+                marginRight: "10px"
+              }
+            },
+            {
+              props: {variant: "outlined", color: "inherit"},
+              style:{
+                border: '1px solide #11db11',
+                textTransform: "none",
+                marginTop: "3px",
+                marginRight: "5px"
+              }
+            }
           ],
         },
+
+
       },
 }
 
