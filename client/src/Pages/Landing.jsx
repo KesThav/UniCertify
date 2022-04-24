@@ -7,16 +7,23 @@ import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import { AlertTitle } from "@mui/material";
 import { ContextAPI } from "../Middlewares/ContextAPI";
+import logo from "../img/logo.png";
 
 const Landing = () => {
-  const { setData, getData, verifyToken, data, count, setCount, alert } =
-    useContext(ContextAPI);
+  const {
+    setData,
+    getData,
+    verifyToken,
+    data,
+    count,
+    setCount,
+    alert,
+    setAlert,
+  } = useContext(ContextAPI);
 
   const [tokenid, setTokenId] = useState("");
 
-  useEffect(() => {
-    getData();
-  }, [count]);
+  useEffect(() => {}, [count]);
 
   return (
     <Fragment>
@@ -34,13 +41,18 @@ const Landing = () => {
             width: "100%",
           }}
         >
+          <img
+            src={logo}
+            style={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
+          />
           <Typography component="h2" variant="h2">
             Enter token
           </Typography>
           <Box
             component="form"
             noValidate
-            /*onSubmit={getData}*/ sx={{ width: "100%" }}
+            onSubmit={(e) => getData(e)}
+            sx={{ width: "100%" }}
           >
             <TextField
               onChange={(e) => setTokenId(e.target.value)}
@@ -58,14 +70,18 @@ const Landing = () => {
             >
               Verify
             </Button>
-            {alert.visible && (
-              <Alert severity={alert.color} fullWidth>
-                <AlertTitle fullWidth><strong>{alert.title}</strong></AlertTitle>
-                <a href={alert.text}>{alert.text}</a>
-              </Alert>
-            )}
           </Box>
         </Box>
+        {alert.visible && (
+          <Alert severity={alert.color} fullWidth>
+            <AlertTitle fullWidth>
+              <strong>{alert.title}</strong>
+            </AlertTitle>
+            <a href={alert.text} onClick={() => setAlert(null)} target="_blank">
+              {alert.text}
+            </a>
+          </Alert>
+        )}
       </Container>
     </Fragment>
   );

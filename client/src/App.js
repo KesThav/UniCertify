@@ -22,10 +22,10 @@ const App = (props) => {
   const [myContract, setContract] = useState(null);
   const [data,updateData] = useState(null);
   const [alert, setAlert] = useState({
-    visible: true,
-    title: "Valid certificate",
-    color: "success",
-    text: "http://localhost:3000/certificates/examples",
+    visible: false,
+    title: null,
+    color: null,
+    text: null,
   });
 
   useEffect(() => {
@@ -66,7 +66,8 @@ const App = (props) => {
     }
   }; */
 
-  const getData = () => {
+  const getData = (e) => {
+    e.preventDefault();
     if (myContract) {
      myContract.methods
         .getData()
@@ -75,35 +76,10 @@ const App = (props) => {
   };
 }
 
-  const getData2 = async () => {
-    try {
-      if(myContract){
-
-     
-      const res = await myContract.methods.getData().call()
-      const temp =
-        res &&
-        res.map((data) => {
-          return {
-            name: data.name,
-            surname: data.surname
-          };
-        });
-      updateData(temp);
-    } } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const verifyToken = (e) => {
-    e.preventDefault();
-    getData();
-    console.log(data)
-  }
 
   return (
     <ThemeProvider theme={theme}>
-      <ContextAPI.Provider value={{ getData,verifyToken,data,count,setCount,alert}}>
+      <ContextAPI.Provider value={{ getData,data,count,setCount,alert,setAlert}}>
         <Navbar/>
       <CssBaseline />
           <Routes>
