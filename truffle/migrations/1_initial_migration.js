@@ -1,9 +1,7 @@
 const Migrations = artifacts.require("Migrations");
-const MyContract = artifacts.require("MyContract");
-const MyNewContract = artifacts.require("MyNewContract");
+const Certificates = artifacts.require("MyCertificates");
 
 module.exports = function (deployer) {
   deployer.deploy(Migrations);
-  deployer.deploy(MyContract);
-  deployer.deploy(MyNewContract);
+  deployer.deploy(Certificates);
 };

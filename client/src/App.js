@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
 import Web3 from "web3";
 import "./App.css";
-import testContract from "contracts/MyContract.json";
+import MyCertificates from "contracts/MyCertificates.json";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import themeSheet from "./util/theme";
 import { ContextAPI } from "./Middlewares/ContextAPI";
@@ -10,7 +10,12 @@ import { Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from './Components/Navbar'
-import Certificates from './Pages/Certificates'
+import CertificatesTemplate from './Pages/CertificatesTemplate'
+import Footer from './Components/footer'
+import UserPage from "./Pages/UserPage";
+import crypto from 'crypto'
+import Certificates from "./Pages/Certificates";
+
 
 const theme = createTheme(themeSheet);
 
@@ -35,7 +40,7 @@ const App = (props) => {
 
     !web3 && setCount((count) => count + 1);
     !networkId && setCount((count) => count + 1);
-    !testContract && setCount((count) => count + 1);
+    !MyCertificates && setCount((count) => count + 1);
 
     if (web3) {
       web3.eth.requestAccounts().then((account) => setAccount(account[0]));
@@ -43,8 +48,8 @@ const App = (props) => {
       if (networkId) {
         setContract(
           new web3.eth.Contract(
-            testContract.abi,
-            testContract.networks[networkId].address
+            MyCertificates.abi,
+            MyCertificates.networks[networkId].address
           )
         );
       }
@@ -66,26 +71,55 @@ const App = (props) => {
     }
   }; */
 
-  const getData = (e) => {
+  const setData = (e,values) => {
     e.preventDefault();
+    let hash = crypto.createHash('sha256').update(values.fname + values.lname).digest('hex')
+    if(myContract){
+      myContract.methods
+      .addCert(new Date(values.s_date).getTime(),new Date(values.e_date).getTime(), values.fname, values.lname, values.c_name,hash)
+      .send({from: account})
+      .then(result => console.log(hash))
+    }
+  }
+
+  const getData = async () => {
+    let temp = [];
     if (myContract) {
-     myContract.methods
-        .getData()
-        .call()
-        .then(result => console.log(result))
-  };
+     let res = await myContract.methods.getCert().call()
+
+     res && res.forEach(item => {
+      temp.push({    
+      fname: item.fname, 
+      lname: item.lname,
+      c_name: item.certName,
+      s_date: new Date(parseInt(item.startdate)).toDateString(),
+      e_date: new Date(parseInt(item.enddate)).toDateString(),
+      hash: item.hash,
+      sender: item.sender 
+      //s_date: candidate.totalVote, 
+      //e_date: candidate.imageHash,
+      //c_name: candidate.candidateAddress,
+      //hash: 
+      });
+      updateData(temp);
+      console.log("ok")
+  })
+    }
 }
 
 
   return (
     <ThemeProvider theme={theme}>
-      <ContextAPI.Provider value={{ getData,data,count,setCount,alert,setAlert}}>
+      <ContextAPI.Provider value={{ getData,data,count,setCount,alert,setAlert,setData}}>
         <Navbar/>
       <CssBaseline />
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/certificates/:certifid" element={<Certificates/>} />
+            <Route path="/add" element={<UserPage/>} />
+            <Route path="/certificates" element={<Certificates/>} />
+            <Route path="/certificates/:certifid" element={<CertificatesTemplate/>} />
           </Routes>
+          <Footer/>
       </ContextAPI.Provider>
     </ThemeProvider>
   );

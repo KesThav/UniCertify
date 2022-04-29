@@ -32,13 +32,13 @@ export default function ButtonAppBar() {
                 justifyContent: "space-between",
               }}
             >
-              <img
+              {/*<img
                 src={logo}
                 style={{
                   maxHeight: "20px",
                   display: "block",
                 }}
-              />
+              />*/}
               <Link
                 to="/"
                 style={{
@@ -57,7 +57,7 @@ export default function ButtonAppBar() {
                 </Typography>
               </Link>
               <Link
-                to="/"
+                to="/certificates"
                 style={{
                   color: "black",
                   textDecoration: "none",
@@ -71,7 +71,7 @@ export default function ButtonAppBar() {
                 </Typography>
               </Link>
               <Link
-                to="/"
+                to="/add"
                 style={{
                   color: "black",
                   textDecoration: "none",
