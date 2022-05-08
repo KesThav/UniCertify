@@ -15,6 +15,7 @@ import Footer from './Components/footer'
 import UserPage from "./Pages/UserPage";
 import crypto from 'crypto'
 import Certificates from "./Pages/Certificates";
+import Login from './Pages/login'
 
 
 const theme = createTheme(themeSheet);
@@ -32,6 +33,8 @@ const App = (props) => {
     color: null,
     text: null,
   });
+
+  const [logged,setLogged] = useState(false);
 
   useEffect(() => {
     detectEthereumProvider()
@@ -74,6 +77,7 @@ const App = (props) => {
   const setData = (e,values) => {
     e.preventDefault();
     let hash = crypto.createHash('sha256').update(values.fname + values.lname).digest('hex')
+    console.log(values,hash);
     if(myContract){
       myContract.methods
       .addCert(new Date(values.s_date).getTime(),new Date(values.e_date).getTime(), values.fname, values.lname, values.c_name,hash)
@@ -82,9 +86,9 @@ const App = (props) => {
     }
   }
 
-  const getData = async () => {
+  const getData = async (e) => {
     let temp = [];
-    if (myContract) {
+    if (web3 && myContract) {
      let res = await myContract.methods.getCert().call()
 
      res && res.forEach(item => {
@@ -96,10 +100,6 @@ const App = (props) => {
       e_date: new Date(parseInt(item.enddate)).toDateString(),
       hash: item.hash,
       sender: item.sender 
-      //s_date: candidate.totalVote, 
-      //e_date: candidate.imageHash,
-      //c_name: candidate.candidateAddress,
-      //hash: 
       });
       updateData(temp);
       console.log("ok")
@@ -107,17 +107,50 @@ const App = (props) => {
     }
 }
 
+  const verifyToken = (e,tokenid) => {
+    e.preventDefault();
+    if(data){
+       const exist = data.filter(data => data.hash == tokenid)
+       if(exist.length != 0){
+        setAlert({
+          visible: true,
+          title: "Token valid !",
+          color: "success",
+          text: <a href={`http://localhost:3000/details/certificates/${tokenid}`}>View certificate here</a>,
+       })
+      } else{
+        setAlert({
+          visible: true,
+          title: "Token not found",
+          color: "error",
+          text: null,
+        })
+       }
+    } else {
+      setAlert({
+        visible: true,
+        title: "Token not found",
+        color: "error",
+        text: null,
+      })
+    }
+
+  }
+
+
+
 
   return (
     <ThemeProvider theme={theme}>
-      <ContextAPI.Provider value={{ getData,data,count,setCount,alert,setAlert,setData}}>
+      <ContextAPI.Provider value={{ getData,data,count,setCount,alert,setAlert,setData,logged,setLogged,verifyToken}}>
         <Navbar/>
       <CssBaseline />
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/add" element={<UserPage/>} />
             <Route path="/certificates" element={<Certificates/>} />
-            <Route path="/certificates/:certifid" element={<CertificatesTemplate/>} />
+            <Route path="/details/certificates/:certifid" element={<CertificatesTemplate/>} />
+            <Route path="/login" element={<Login/>} />
           </Routes>
           <Footer/>
       </ContextAPI.Provider>

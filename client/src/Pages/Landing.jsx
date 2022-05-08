@@ -8,6 +8,7 @@ import Alert from "@mui/material/Alert";
 import { AlertTitle } from "@mui/material";
 import { ContextAPI } from "../Middlewares/ContextAPI";
 import logo from "../img/logo.png";
+import Stack from '@mui/material/Stack';
 
 const Landing = () => {
   const {
@@ -18,12 +19,15 @@ const Landing = () => {
     count,
     setCount,
     alert,
-    setAlert,
+    setAlert
   } = useContext(ContextAPI);
 
   const [tokenid, setTokenId] = useState("");
 
-  useEffect(() => {}, [count]);
+  useEffect(() => {
+    getData();
+    !data && setCount(count => count+1)
+  }, [count]);
 
   return (
     <Fragment>
@@ -45,13 +49,16 @@ const Landing = () => {
             src={logo}
             style={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
           />
-          <Typography component="h2" variant="h2">
+          <Typography component="h2" variant="h2" 
+          sx={{
+        fontFamily: 'Patua One',
+      }}>
             Enter token
           </Typography>
           <Box
             component="form"
             noValidate
-            onSubmit={(e) => getData(e)}
+            onSubmit={(e) => verifyToken(e,tokenid)}
             sx={{ width: "100%" }}
           >
             <TextField
@@ -71,17 +78,20 @@ const Landing = () => {
               Verify
             </Button>
           </Box>
-        </Box>
-        {alert.visible && (
-          <Alert severity={alert.color} fullWidth>
-            <AlertTitle fullWidth>
+          {alert.visible && (
+            <Stack sx={{ width: '100%' }} spacing={2}>
+                        <Alert severity={alert.color}>
+            <AlertTitle >
               <strong>{alert.title}</strong>
             </AlertTitle>
-            <a href={alert.text} onClick={() => setAlert(null)} target="_blank">
+
               {alert.text}
-            </a>
+
           </Alert>
+            </Stack>
+
         )}
+        </Box>
       </Container>
     </Fragment>
   );

@@ -17,7 +17,7 @@ const footer = () => {
         }}
       >
         <Typography variant="caption">
-          Digitalization and Information Systems © Kesigan Thavarajasingam
+          Digitalization and Information Systems © Kesigan Thavarajasingam & Sebastian Steer
         </Typography>
       </footer>
     </Fragment>

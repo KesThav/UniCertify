@@ -15,7 +15,7 @@ const bull = (
   </Box>
 );
 
-const CardTemplate = ({c_name,sender}) => {
+const CardTemplate = ({c_name,fname,lname,e_date,s_date,hash,sender}) => {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
@@ -26,10 +26,10 @@ const CardTemplate = ({c_name,sender}) => {
           {c_name}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          adjective
+          {hash}
         </Typography>
         <Typography variant="body2">
-          well meaning and kindly.
+          {}
           <br />
           {'"a benevolent smile"'}
         </Typography>

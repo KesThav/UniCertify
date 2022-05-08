@@ -1,4 +1,4 @@
-import { padding, textTransform } from "@mui/system";
+import { padding, textTransform } from "@mui/system"
 
 const theme = {
     components: {
@@ -47,10 +47,21 @@ const theme = {
               }
             }
           ],
+
         },
-
-
+        MuiCssBaseline: {
+          styleOverrides: `
+          @font-face {
+            font-family: 'Comic Sans MS';
+            font-style: normal;
+            font-display: swap;
+            font-weight: 400;
+            src: local('Comic Sans MS');
+          }
+          `,
+        },
       },
+
 }
 
 export default theme;

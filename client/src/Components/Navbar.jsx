@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,11 +8,17 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import logo from "../img/logo.png";
+import { ContextAPI } from "../Middlewares/ContextAPI";
 
-export default function ButtonAppBar() {
+const ButtonAppBar = (props) => {
+  const { logged, setLogged } = useContext(ContextAPI);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="sticky" sx={{ bgcolor: "white", boxShadow: "none",maxHeight:"100px" }}>
+      <AppBar
+        position="sticky"
+        sx={{ bgcolor: "white", boxShadow: "none", maxHeight: "100px" }}
+      >
         <Toolbar>
           <Box
             sx={{
@@ -28,7 +34,7 @@ export default function ButtonAppBar() {
                 flexDirection: "row",
                 alignItems: "center",
                 color: "black",
-                minWidth: "400px",
+                //minWidth: "400px",
                 justifyContent: "space-between",
               }}
             >
@@ -44,6 +50,7 @@ export default function ButtonAppBar() {
                 style={{
                   color: "black",
                   textDecoration: "none",
+                  marginRight:"10px",
                   "&:hover": { color: "green", cursor: "pointer" },
                 }}
               >
@@ -61,6 +68,7 @@ export default function ButtonAppBar() {
                 style={{
                   color: "black",
                   textDecoration: "none",
+                  marginRight:"10px",
                   "&:hover": { color: "green", cursor: "pointer" },
                 }}
               >
@@ -70,7 +78,7 @@ export default function ButtonAppBar() {
                   View all certificates
                 </Typography>
               </Link>
-              <Link
+              {logged && <Link
                 to="/add"
                 style={{
                   color: "black",
@@ -83,20 +91,30 @@ export default function ButtonAppBar() {
                 >
                   Add certificates
                 </Typography>
-              </Link>
+              </Link>}
             </Box>
 
             <Box>
-              <Button variant="text" color="primary">
-                Create Account
-              </Button>
-              <Button variant="contained" color="primary">
-                Login
-              </Button>
+              {logged ? (
+                <Typography
+                  sx={{ color: "black", "&:hover": { color: "green", cursor: "pointer" } }}
+                onClick={() => setLogged(false)}>
+                  Logout
+                </Typography>
+              ) : (
+                <Typography
+                  sx={{ color: "black", "&:hover": { color: "green", cursor: "pointer" } }}
+                  onClick={() => setLogged(true)}
+                >
+                  Login
+                </Typography>
+              )}
             </Box>
           </Box>
         </Toolbar>
       </AppBar>
     </Box>
   );
-}
+};
+
+export default ButtonAppBar;
