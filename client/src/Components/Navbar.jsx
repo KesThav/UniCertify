@@ -17,7 +17,7 @@ const ButtonAppBar = (props) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="sticky"
-        sx={{ bgcolor: "white", boxShadow: "none", maxHeight: "100px" }}
+        sx={{ bgcolor: "#FAFAFA", boxShadow: "none", maxHeight: "100px" }}
       >
         <Toolbar>
           <Box

@@ -51,13 +51,14 @@ const Landing = () => {
             width: "100%",
           }}
         >
-          <img
+          {/*<img
             src={logo}
             style={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
-          />
+          />*/}
           <Typography component="h2" variant="h2" 
           sx={{
-        fontFamily: 'Patua One',
+        fontFamily: 'Segoe UI',
+        fontWeight: 'bold'
       }}>
             Enter token
           </Typography>

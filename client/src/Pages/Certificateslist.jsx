@@ -13,8 +13,8 @@ const Certificates = (props) => {
   }, [data, count]);
   return (
     <Fragment>
-      <Typography variant="h3">All certificates</Typography>
-      <div style={{display: "flex", flexDirection: "row",flex: "1 0 21%",  flexWrap: "wrap"}}>
+      <Typography variant="h3" sx={{fontFamily: "Segoe UI", fontWeight: "bold",margin: "10px 10px"}}>All certificates</Typography>
+      <div style={{display: "flex", flexDirection: "row",flex: 1,  flexWrap: "wrap"}}>
         {data && data.lenght == 0 ? (
           <h3>Loading...</h3>
         ) : (

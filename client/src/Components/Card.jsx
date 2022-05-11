@@ -21,6 +21,7 @@ const CardTemplate = ({c_name,fname,lname,e_date,s_date,hash,sender}) => {
   return (
 <Card sx={{ width: 450,margin: "10px 10px" }}>
       <CardMedia
+      sx={{bgcolor:"blue",padding:0}}
       >
         <Skeleton
   sx={{ bgcolor: 'grey.900' }}
@@ -35,19 +36,17 @@ const CardTemplate = ({c_name,fname,lname,e_date,s_date,hash,sender}) => {
           {c_name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Delivered by {sender}
+          Delivered by <br/>{sender}
         </Typography>
         <Typography variant="body2" color="text.secondary">
         </Typography>
-      </CardContent>
-      <CardActions>
         <Typography><a href={`http://localhost:3000/details/certificates/${hash}`} style={{
                   color: "black",
                   textDecoration: "none",
                   marginRight:"10px",
                   "&:hover": { color: "green", cursor: "pointer" },
                 }}>See more</a></Typography>
-      </CardActions>
+      </CardContent>
     </Card>
   );
 }

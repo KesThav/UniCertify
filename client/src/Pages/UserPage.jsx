@@ -12,8 +12,8 @@ const UserPage = (props) => {
   const [allValues, setAllValues] = useState({
     fname: null,
     lname: null,
-    s_date: null,
-    e_date: null,
+    s_date: new Date(parseInt("1990-01-01")).toDateString(),
+    e_date: "2017-05-24",
     c_name: null
  });
  const changeHandler = e => {
@@ -22,9 +22,17 @@ const UserPage = (props) => {
 
   return (
     <Fragment>
-        <Container component="main" maxWidth="sm">
-
-          <Typography variant="h3">Add a certificate</Typography>
+        <Container component="main" maxWidth="sm" sx={{ width: "100vw", height: "80vh", display: "flex", width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <Typography variant="h3" sx={{fontFamily: "Segoe UI", fontWeight: "bold"}}>Add certificate</Typography>
         <Box component="form" noValidate onSubmit={(e) => setData(e,allValues)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -104,7 +112,8 @@ const UserPage = (props) => {
             </Stack>
 
         )}
-        {console.log(account && account)}
+        {console.log(allValues)}
+        </Box>
         </Container>
     </Fragment>
   )
