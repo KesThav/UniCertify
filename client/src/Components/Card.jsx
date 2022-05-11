@@ -3,8 +3,10 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 
 const bull = (
   <Box
@@ -17,25 +19,34 @@ const bull = (
 
 const CardTemplate = ({c_name,fname,lname,e_date,s_date,hash,sender}) => {
   return (
-    <Card sx={{ minWidth: 275 }}>
+<Card sx={{ width: 450,margin: "10px 10px" }}>
+      <CardMedia
+      >
+        <Skeleton
+  sx={{ bgcolor: 'grey.900' }}
+  animation="false"
+  variant="rectangular"
+  width={450}
+  height={200}
+/>
+        </CardMedia>
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {sender}
-        </Typography>
-        <Typography variant="h5" component="div">
+        <Typography gutterBottom variant="h5" component="div">
           {c_name}
         </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {hash}
+        <Typography variant="body2" color="text.secondary">
+          Delivered by {sender}
         </Typography>
-        <Typography variant="body2">
-          {}
-          <br />
-          {'"a benevolent smile"'}
+        <Typography variant="body2" color="text.secondary">
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Typography><a href={`http://localhost:3000/details/certificates/${hash}`} style={{
+                  color: "black",
+                  textDecoration: "none",
+                  marginRight:"10px",
+                  "&:hover": { color: "green", cursor: "pointer" },
+                }}>See more</a></Typography>
       </CardActions>
     </Card>
   );

@@ -9,14 +9,13 @@ import { ContextAPI } from "./Middlewares/ContextAPI";
 import { Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing";
 import CssBaseline from "@mui/material/CssBaseline";
-import Navbar from './Components/Navbar'
-import CertificatesTemplate from './Pages/CertificatesTemplate'
-import Footer from './Components/footer'
+import Navbar from "./Components/Navbar";
+import CertificatesTemplate from "./Pages/CertificatesPage";
+import Footer from "./Components/footer";
 import UserPage from "./Pages/UserPage";
-import crypto from 'crypto'
-import Certificates from "./Pages/Certificates";
-import Login from './Pages/login'
-
+import crypto from "crypto";
+import Certificateslist from "./Pages/Certificateslist";
+import Login from "./Pages/login";
 
 const theme = createTheme(themeSheet);
 
@@ -26,7 +25,7 @@ const App = (props) => {
   const [account, setAccount] = useState(null);
   const [networkId, setNetwork] = useState(null);
   const [myContract, setContract] = useState(null);
-  const [data,updateData] = useState(null);
+  const [data, updateData] = useState(null);
   const [alert, setAlert] = useState({
     visible: false,
     title: null,
@@ -34,7 +33,7 @@ const App = (props) => {
     text: null,
   });
 
-  const [logged,setLogged] = useState(false);
+  const [logged, setLogged] = useState(false);
 
   useEffect(() => {
     detectEthereumProvider()
@@ -56,6 +55,9 @@ const App = (props) => {
           )
         );
       }
+      window.ethereum.on('accountsChanged', function (accounts) {
+        setAccount(accounts[0])
+      })
     }
   }, [count]);
 
@@ -74,85 +76,154 @@ const App = (props) => {
     }
   }; */
 
-  const setData = (e,values) => {
-    e.preventDefault();
-    let hash = crypto.createHash('sha256').update(values.fname + values.lname).digest('hex')
-    console.log(values,hash);
-    if(myContract){
-      myContract.methods
-      .addCert(new Date(values.s_date).getTime(),new Date(values.e_date).getTime(), values.fname, values.lname, values.c_name,hash)
-      .send({from: account})
-      .then(result => console.log(hash))
+  const setData = (e, values) => {
+    try {
+      e.preventDefault();
+      if (
+        !values.s_date ||
+        !values.e_date ||
+        !values.fname ||
+        !values.lname ||
+        !values.c_name
+      ) {
+        setAlert({
+          visible: true,
+          title: "Error",
+          color: "error",
+          text: "Fill the form as required.",
+        });
+      } else {
+        setAlert({
+          visible: true,
+          title: "Sending data",
+          color: "info",
+          text: "Sending data, please wait...",
+        });
+        let hash = crypto
+          .createHash("sha256")
+          .update(values.fname + values.lname)
+          .digest("hex");
+        console.log(values, hash);
+        if (myContract) {
+          myContract.methods
+            .addCert(
+              new Date(values.s_date).getTime(),
+              new Date(values.e_date).getTime(),
+              values.fname,
+              values.lname,
+              values.c_name,
+              hash
+            )
+            .send({ from: account })
+            .then((result) =>
+              setAlert({
+                visible: true,
+                title: "Data sent !",
+                color: "success",
+                text: `Hash code : ${hash}`,
+              })
+            );
+        }
+      }
+    } catch (error) {
+      setAlert({
+        visible: true,
+        title: "Error",
+        color: "error",
+        text: error.message,
+      });
     }
-  }
+  };
 
   const getData = async (e) => {
     let temp = [];
     if (web3 && myContract) {
-     let res = await myContract.methods.getCert().call()
-
-     res && res.forEach(item => {
-      temp.push({    
-      fname: item.fname, 
-      lname: item.lname,
-      c_name: item.certName,
-      s_date: new Date(parseInt(item.startdate)).toDateString(),
-      e_date: new Date(parseInt(item.enddate)).toDateString(),
-      hash: item.hash,
-      sender: item.sender 
-      });
-      updateData(temp);
-      console.log("ok")
-  })
+      try {
+        console.log(myContract.methods)
+        let res = await myContract.methods.getCert().call();
+        res && console.log(res);
+        res &&
+          res.forEach((item) => {
+            temp.push({
+              fname: item.fname,
+              lname: item.lname,
+              c_name: item.certName,
+              s_date: new Date(parseInt(item.startdate)).toDateString(),
+              e_date: new Date(parseInt(item.enddate)).toDateString(),
+              hash: item.hash,
+              sender: item.sender,
+            });
+            updateData(temp);
+            console.log("ok");
+          });
+      } catch (error) {
+        //console.log(error.message);
+      }
     }
-}
+  };
 
-  const verifyToken = (e,tokenid) => {
+  const verifyToken = (e, tokenid) => {
     e.preventDefault();
-    if(data){
-       const exist = data.filter(data => data.hash == tokenid)
-       if(exist.length != 0){
+    if (data) {
+      const exist = data.filter((data) => data.hash == tokenid);
+      if (exist.length != 0) {
         setAlert({
           visible: true,
           title: "Token valid !",
           color: "success",
-          text: <a href={`http://localhost:3000/details/certificates/${tokenid}`}>View certificate here</a>,
-       })
-      } else{
+          text: (
+            <a href={`http://localhost:3000/details/certificates/${tokenid}`}>
+              View certificate here
+            </a>
+          ),
+        });
+      } else {
         setAlert({
           visible: true,
           title: "Token not found",
           color: "error",
           text: null,
-        })
-       }
+        });
+      }
     } else {
       setAlert({
         visible: true,
         title: "Token not found",
         color: "error",
         text: null,
-      })
+      });
     }
-
-  }
-
-
-
+  };
 
   return (
     <ThemeProvider theme={theme}>
-      <ContextAPI.Provider value={{ getData,data,count,setCount,alert,setAlert,setData,logged,setLogged,verifyToken}}>
-        <Navbar/>
-      <CssBaseline />
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/add" element={<UserPage/>} />
-            <Route path="/certificates" element={<Certificates/>} />
-            <Route path="/details/certificates/:certifid" element={<CertificatesTemplate/>} />
-            <Route path="/login" element={<Login/>} />
-          </Routes>
-          <Footer/>
+      <ContextAPI.Provider
+        value={{
+          getData,
+          data,
+          count,
+          setCount,
+          alert,
+          setAlert,
+          setData,
+          logged,
+          setLogged,
+          verifyToken,
+          account
+        }}
+      >
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/add" element={<UserPage />} />
+          <Route path="/certificates" element={<Certificateslist />} />
+          <Route
+            path="/details/certificates/:certifid"
+            element={<CertificatesTemplate />}
+          />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+        <Footer />
       </ContextAPI.Provider>
     </ThemeProvider>
   );

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,Fragment } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,7 +11,7 @@ import logo from "../img/logo.png";
 import { ContextAPI } from "../Middlewares/ContextAPI";
 
 const ButtonAppBar = (props) => {
-  const { logged, setLogged } = useContext(ContextAPI);
+  const { logged, setLogged, account } = useContext(ContextAPI);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -50,7 +50,7 @@ const ButtonAppBar = (props) => {
                 style={{
                   color: "black",
                   textDecoration: "none",
-                  marginRight:"10px",
+                  marginRight: "10px",
                   "&:hover": { color: "green", cursor: "pointer" },
                 }}
               >
@@ -68,7 +68,7 @@ const ButtonAppBar = (props) => {
                 style={{
                   color: "black",
                   textDecoration: "none",
-                  marginRight:"10px",
+                  marginRight: "10px",
                   "&:hover": { color: "green", cursor: "pointer" },
                 }}
               >
@@ -78,32 +78,43 @@ const ButtonAppBar = (props) => {
                   View all certificates
                 </Typography>
               </Link>
-              {logged && <Link
-                to="/add"
-                style={{
-                  color: "black",
-                  textDecoration: "none",
-                  "&:hover": { color: "green", cursor: "pointer" },
-                }}
-              >
-                <Typography
-                  sx={{ "&:hover": { color: "green", cursor: "pointer" } }}
+              {logged && (
+                <Link
+                  to="/add"
+                  style={{
+                    color: "black",
+                    textDecoration: "none",
+                    "&:hover": { color: "green", cursor: "pointer" },
+                  }}
                 >
-                  Add certificates
-                </Typography>
-              </Link>}
+                  <Typography
+                    sx={{ "&:hover": { color: "green", cursor: "pointer" } }}
+                  >
+                    Add certificates
+                  </Typography>
+                </Link>
+              )}
             </Box>
 
             <Box>
               {logged ? (
-                <Typography
-                  sx={{ color: "black", "&:hover": { color: "green", cursor: "pointer" } }}
-                onClick={() => setLogged(false)}>
-                  Logout
-                </Typography>
+                <Fragment>
+                  <Typography
+                    sx={{
+                      color: "black",
+                      "&:hover": { color: "green", cursor: "pointer" },
+                    }}
+                    onClick={() => setLogged(false)}
+                  >
+                    Logout
+                  </Typography>
+                </Fragment>
               ) : (
                 <Typography
-                  sx={{ color: "black", "&:hover": { color: "green", cursor: "pointer" } }}
+                  sx={{
+                    color: "black",
+                    "&:hover": { color: "green", cursor: "pointer" },
+                  }}
                   onClick={() => setLogged(true)}
                 >
                   Login

@@ -1,10 +1,13 @@
 import React,{Fragment, useContext, useState} from 'react'
 import {Container,Box,Grid,TextField,Link,Button} from '@mui/material'
 import { ContextAPI } from "../Middlewares/ContextAPI";
+import Stack from '@mui/material/Stack';
+import Alert from "@mui/material/Alert";
+import { AlertTitle,Typography } from "@mui/material";
 
 const UserPage = (props) => {
 
-  const {setData} = useContext(ContextAPI);
+  const {setData,alert,account} = useContext(ContextAPI);
 
   const [allValues, setAllValues] = useState({
     fname: null,
@@ -19,7 +22,9 @@ const UserPage = (props) => {
 
   return (
     <Fragment>
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="sm">
+
+          <Typography variant="h3">Add a certificate</Typography>
         <Box component="form" noValidate onSubmit={(e) => setData(e,allValues)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -80,11 +85,26 @@ const UserPage = (props) => {
               type="submit"
               fullWidth
               variant="contained"
+              color="secondary"
               sx={{ mt: 3, mb: 2 }}
             >
               Add certificates
             </Button>
           </Box>
+          {alert.visible && (
+            <Stack sx={{ width: '100%' }} spacing={2}>
+                        <Alert severity={alert.color}>
+            <AlertTitle >
+              <strong>{alert.title}</strong>
+            </AlertTitle>
+
+              {alert.text}
+
+          </Alert>
+            </Stack>
+
+        )}
+        {console.log(account && account)}
         </Container>
     </Fragment>
   )
