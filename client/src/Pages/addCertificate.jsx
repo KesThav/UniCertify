@@ -114,6 +114,7 @@ const AddCertificate = (props) => {
                   name="lname"
                   onChange={changeHandler}
                   value={allValues.lname}
+                  disabled
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
