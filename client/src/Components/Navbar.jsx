@@ -80,7 +80,7 @@ const ButtonAppBar = (props) => {
               </Link>
               {logged && (
                 <Link
-                  to="/add"
+                  to="/dashboard"
                   style={{
                     color: "black",
                     textDecoration: "none",
@@ -90,7 +90,7 @@ const ButtonAppBar = (props) => {
                   <Typography
                     sx={{ "&:hover": { color: "green", cursor: "pointer" } }}
                   >
-                    Add certificates
+                    Dashboard
                   </Typography>
                 </Link>
               )}

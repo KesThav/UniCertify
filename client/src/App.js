@@ -12,10 +12,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "./Components/Navbar";
 import CertificatesTemplate from "./Pages/CertificatesPage";
 import Footer from "./Components/footer";
-import UserPage from "./Pages/UserPage";
+import addCertificate from "./Pages/addCertificate";
 import crypto from "crypto";
 import Certificateslist from "./Pages/Certificateslist";
 import Login from "./Pages/login";
+import Dashboard from './Pages/Dashboard'
 
 const theme = createTheme(themeSheet);
 
@@ -32,6 +33,8 @@ const App = (props) => {
     color: null,
     text: null,
   });
+
+  const [students, updateStudents] = useState(null);
 
   const [logged, setLogged] = useState(false);
 
@@ -84,7 +87,8 @@ const App = (props) => {
         !values.e_date ||
         !values.fname ||
         !values.lname ||
-        !values.c_name
+        !values.c_name ||
+        !values.studentid
       ) {
         setAlert({
           visible: true,
@@ -112,6 +116,7 @@ const App = (props) => {
               values.fname,
               values.lname,
               values.c_name,
+              values.studentid,
               hash
             )
             .send({ from: account })
@@ -135,13 +140,62 @@ const App = (props) => {
     }
   };
 
+  const setStudent = (e, values) => {
+    console.log(values)
+    try {
+      e.preventDefault();
+      if (
+        !values.fname ||
+        !values.lname ||
+        !values.studentid
+      ) {
+        setAlert({
+          visible: true,
+          title: "Error",
+          color: "error",
+          text: "Fill the form as required.",
+        });
+      } else {
+        setAlert({
+          visible: true,
+          title: "Sending student",
+          color: "info",
+          text: "Sending student, please wait...",
+        });
+        console.log(values);
+        if (myContract) {
+          myContract.methods
+            .addStudent(
+              values.fname,
+              values.lname,
+              values.studentid
+            )
+            .send({ from: account })
+            .then((result) =>
+              setAlert({
+                visible: true,
+                title: "Student created !",
+                color: "success",
+                text: `Student created successfully !`,
+              })
+            );
+        }
+      }
+    } catch (error) {
+      setAlert({
+        visible: true,
+        title: "Error",
+        color: "error",
+        text: error.message,
+      });
+    }
+  };
+
   const getData = async (e) => {
     let temp = [];
     if (web3 && myContract) {
       try {
-        console.log(myContract.methods)
         let res = await myContract.methods.getCert().call();
-        res && console.log(res);
         res &&
           res.forEach((item) => {
             temp.push({
@@ -154,6 +208,28 @@ const App = (props) => {
               sender: item.sender,
             });
             updateData(temp);
+            console.log("ok");
+          });
+      } catch (error) {
+        //console.log(error.message);
+      }
+    }
+  };
+
+  const getStudent = async (e) => {
+    let temp = [];
+    if (web3 && myContract) {
+      try {
+        let res = await myContract.methods.getStudent().call();
+        res &&
+          res.forEach((item) => {
+            temp.push({
+              fname: item.fname,
+              lname: item.lname,
+              studentid : item.studentid,
+              address : item.address
+            });
+            updateStudents(temp);
             console.log("ok");
           });
       } catch (error) {
@@ -209,13 +285,16 @@ const App = (props) => {
           logged,
           setLogged,
           verifyToken,
-          account
+          account,
+          getStudent,
+          students,
+          setStudent
         }}
       >
         <Navbar />
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/add" element={<UserPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/certificates" element={<Certificateslist />} />
           <Route
             path="/details/certificates/:certifid"
