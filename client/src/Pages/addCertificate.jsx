@@ -10,7 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const AddCertificate = (props) => {
-  const { setData, alert, account, getStudent, students } =
+  const { setData, alert, account, getStudent, students,setAlert} =
     useContext(ContextAPI);
 
   const [allValues, setAllValues] = useState({
@@ -43,6 +43,12 @@ const AddCertificate = (props) => {
   useEffect(() => {
     getStudent();
     !students && setCount(count => count+1)
+    setAlert({
+      visible: false,
+      title: null,
+      color: null,
+      text: null,
+    })
   }, [count]);
 
   return (
@@ -86,7 +92,7 @@ const AddCertificate = (props) => {
                   fullWidth
                 >
                   {students &&
-                    students.map((student) => (
+                    students.filter(student => student.sender === account).map((student) => (
                       <MenuItem key={student.studentid} value={student.studentid}>
                         {student.studentid}
                       </MenuItem>
@@ -174,7 +180,6 @@ const AddCertificate = (props) => {
           )}
         </Box>
       </Container>
-      {console.log(allValues)}
     </Fragment>
   );
 };

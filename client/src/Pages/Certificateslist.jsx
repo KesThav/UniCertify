@@ -22,6 +22,7 @@ const Certificates = (props) => {
           data.length != 0 &&
           data.map((item) => (
             <Card
+            expired={item.expired}
               key={item.hash}
               fname={item.fname}
               lname={item.lname}

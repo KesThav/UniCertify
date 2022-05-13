@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext, useState,useEffect } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -6,10 +6,10 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import AddCertificate from './addCertificate'
 import AddStudent from './addStudent'
+import { ContextAPI } from "../Middlewares/ContextAPI";
 
 const TabsPanel = () => {
   const [value, setValue] = useState("1");
-
 
 
   return (

@@ -103,9 +103,10 @@ const App = (props) => {
           color: "info",
           text: "Sending data, please wait...",
         });
+        let num = Math.random()
         let hash = crypto
           .createHash("sha256")
-          .update(values.fname + values.lname)
+          .update(values.fname + values.lname + num + values.s_date + values.e_date + values.studentid)
           .digest("hex");
         console.log(values, hash);
         if (myContract) {
@@ -141,7 +142,6 @@ const App = (props) => {
   };
 
   const setStudent = (e, values) => {
-    console.log(values)
     try {
       e.preventDefault();
       if (
@@ -162,7 +162,6 @@ const App = (props) => {
           color: "info",
           text: "Sending student, please wait...",
         });
-        console.log(values);
         if (myContract) {
           myContract.methods
             .addStudent(
@@ -206,12 +205,13 @@ const App = (props) => {
               e_date: new Date(parseInt(item.enddate)).toDateString(),
               hash: item.hash,
               sender: item.sender,
+              expired: Date.parse(new Date(parseInt(item.enddate)).toDateString()) < Date.parse(new Date()) ? true : false
             });
             updateData(temp);
             console.log("ok");
           });
       } catch (error) {
-        //console.log(error.message);
+        console.log(error.message);
       }
     }
   };
@@ -227,13 +227,13 @@ const App = (props) => {
               fname: item.fname,
               lname: item.lname,
               studentid : item.studentid,
-              address : item.address
+              sender : item.sender
             });
             updateStudents(temp);
             console.log("ok");
           });
       } catch (error) {
-        //console.log(error.message);
+        console.log(error.message);
       }
     }
   };
@@ -241,9 +241,19 @@ const App = (props) => {
   const verifyToken = (e, tokenid) => {
     e.preventDefault();
     if (data) {
-      const exist = data.filter((data) => data.hash == tokenid);
+      const exist = data.filter((data) => data.hash === tokenid)
       if (exist.length != 0) {
-        setAlert({
+        let expired = exist.map(value=> value.expired)[0]
+        console.log(exist)
+        if(expired){
+          setAlert({
+            visible: true,
+            title: "Token expired !",
+            color: "error",
+            text: "The token is no longer valid",
+          })
+        }else{
+          setAlert({
           visible: true,
           title: "Token valid !",
           color: "success",
@@ -253,6 +263,8 @@ const App = (props) => {
             </a>
           ),
         });
+        }
+        
       } else {
         setAlert({
           visible: true,
@@ -288,7 +300,8 @@ const App = (props) => {
           account,
           getStudent,
           students,
-          setStudent
+          setStudent,
+          myContract
         }}
       >
         <Navbar />

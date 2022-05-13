@@ -7,6 +7,10 @@ import CardMedia from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import Chip from '@mui/material/Chip';
+import DoneIcon from '@mui/icons-material/Done';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 
 const bull = (
   <Box
@@ -17,7 +21,7 @@ const bull = (
   </Box>
 );
 
-const CardTemplate = ({c_name,fname,lname,e_date,s_date,hash,sender}) => {
+const CardTemplate = ({c_name,fname,lname,e_date,s_date,hash,sender,expired}) => {
   return (
 <Card sx={{ width: 450,margin: "10px 10px" }}>
       <CardMedia
@@ -25,7 +29,7 @@ const CardTemplate = ({c_name,fname,lname,e_date,s_date,hash,sender}) => {
       >
         <Skeleton
   sx={{ bgcolor: 'grey.900' }}
-  animation="false"
+  animation={false}
   variant="rectangular"
   width={450}
   height={200}
@@ -33,7 +37,7 @@ const CardTemplate = ({c_name,fname,lname,e_date,s_date,hash,sender}) => {
         </CardMedia>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {c_name}
+          {c_name} <Chip label={expired ? "expired" : "valid"} color={expired ? "error" : "success"} size="small" avatar={expired ? <CloseIcon/> : <DoneIcon />} variant="outlined"/>
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Delivered by <br/>{sender}

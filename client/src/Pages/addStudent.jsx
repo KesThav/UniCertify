@@ -1,4 +1,4 @@
-import React,{Fragment, useContext, useState} from 'react'
+import React,{Fragment, useContext, useState,useEffect} from 'react'
 import {Container,Box,Grid,TextField,Link,Button} from '@mui/material'
 import { ContextAPI } from "../Middlewares/ContextAPI";
 import Stack from '@mui/material/Stack';
@@ -7,7 +7,7 @@ import { AlertTitle,Typography } from "@mui/material";
 
 const AddStudent = (props) => {
 
-  const {setStudent,alert,account} = useContext(ContextAPI);
+  const {setStudent,alert,account,students,setAlert} = useContext(ContextAPI);
 
   const [allValues, setAllValues] = useState({
     fname: null,
@@ -17,6 +17,15 @@ const AddStudent = (props) => {
  const changeHandler = e => {
     setAllValues({...allValues, [e.target.name]: e.target.value})
  }
+
+ useEffect(() => {
+  setAlert({
+    visible: false,
+    title: null,
+    color: null,
+    text: null,
+  })
+ },[])
 
   return (
     <Fragment>
