@@ -78,7 +78,6 @@ const ButtonAppBar = (props) => {
                   View all certificates
                 </Typography>
               </Link>
-              {logged && (
                 <Link
                   to="/dashboard"
                   style={{
@@ -93,33 +92,6 @@ const ButtonAppBar = (props) => {
                     Dashboard
                   </Typography>
                 </Link>
-              )}
-            </Box>
-
-            <Box>
-              {logged ? (
-                <Fragment>
-                  <Typography
-                    sx={{
-                      color: "black",
-                      "&:hover": { color: "green", cursor: "pointer" },
-                    }}
-                    onClick={() => setLogged(false)}
-                  >
-                    Logout
-                  </Typography>
-                </Fragment>
-              ) : (
-                <Typography
-                  sx={{
-                    color: "black",
-                    "&:hover": { color: "green", cursor: "pointer" },
-                  }}
-                  onClick={() => setLogged(true)}
-                >
-                  Login
-                </Typography>
-              )}
             </Box>
           </Box>
         </Toolbar>

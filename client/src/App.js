@@ -36,7 +36,8 @@ const App = (props) => {
 
   const [students, updateStudents] = useState(null);
 
-  const [logged, setLogged] = useState(false);
+
+  const [uniData, updateUniData] = useState(null);
 
   useEffect(() => {
     detectEthereumProvider()
@@ -130,6 +131,7 @@ const App = (props) => {
               })
             );
         }
+        setCount(count => count+1)
       }
     } catch (error) {
       setAlert({
@@ -179,7 +181,9 @@ const App = (props) => {
               })
             );
         }
+        setCount(count => count+1)
       }
+      
     } catch (error) {
       setAlert({
         visible: true,
@@ -204,11 +208,11 @@ const App = (props) => {
               s_date: new Date(parseInt(item.startdate)).toDateString(),
               e_date: new Date(parseInt(item.enddate)).toDateString(),
               hash: item.hash,
-              sender: item.sender,
+              sender: item.uni,
+              studentid: item.studentid,
               expired: Date.parse(new Date(parseInt(item.enddate)).toDateString()) < Date.parse(new Date()) ? true : false
             });
             updateData(temp);
-            console.log("ok");
           });
       } catch (error) {
         console.log(error.message);
@@ -220,17 +224,16 @@ const App = (props) => {
     let temp = [];
     if (web3 && myContract) {
       try {
-        let res = await myContract.methods.getStudent().call();
+        let res = await myContract.methods.getStudents().call();
         res &&
           res.forEach((item) => {
             temp.push({
               fname: item.fname,
               lname: item.lname,
               studentid : item.studentid,
-              sender : item.sender
+              sender : item.uni
             });
             updateStudents(temp);
-            console.log("ok");
           });
       } catch (error) {
         console.log(error.message);
@@ -283,6 +286,72 @@ const App = (props) => {
     }
   };
 
+  const getUniData = async () => {
+    let temp = [];
+    if (web3 && myContract) {
+      try {
+        let res = await myContract.methods.getUniNames().call();
+        res &&
+          res.forEach((item) => {
+            temp.push({
+              address: item.uni,
+              name: item.name,
+              registered: true
+            });
+            updateUniData(temp);
+          });
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  }
+
+  const setUniName = async (e,uniName) => {
+    try {
+      e.preventDefault();
+      if (
+        !uniName
+      ) {
+        setAlert({
+          visible: true,
+          title: "Error",
+          color: "error",
+          text: "Fill the form as required.",
+        });
+      } else {
+        setAlert({
+          visible: true,
+          title: "Sending uniName",
+          color: "info",
+          text: "Sending uniName, please wait...",
+        });
+        if (myContract) {
+          myContract.methods
+            .updateUniName(
+              uniName
+            )
+            .send({ from: account })
+            .then((result) =>
+              setAlert({
+                visible: true,
+                title: "uniName added !",
+                color: "success",
+                text: `uniName added successfully !`,
+              })
+            ).then(res => setCount(count => count+1));
+        }
+        
+      }
+    } catch (error) {
+      setAlert({
+        visible: true,
+        title: "Error",
+        color: "error",
+        text: error.message,
+      });
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <ContextAPI.Provider
@@ -294,14 +363,15 @@ const App = (props) => {
           alert,
           setAlert,
           setData,
-          logged,
-          setLogged,
           verifyToken,
           account,
           getStudent,
           students,
           setStudent,
-          myContract
+          myContract,
+          getUniData,
+          setUniName,
+          uniData
         }}
       >
         <Navbar />

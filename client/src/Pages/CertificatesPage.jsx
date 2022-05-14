@@ -3,27 +3,48 @@ import { useParams } from "react-router-dom";
 import { Box, Avatar, Typography, Button, Container } from "@mui/material";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { ContextAPI } from "../Middlewares/ContextAPI";
-import { setUncaughtExceptionCaptureCallback } from "process";
 
 const CertificatesTemplate = (props) => {
   let { certifid } = useParams();
 
-  const {getData,data} = useContext(ContextAPI)
+  const {getData,data,getUniData,uniData} = useContext(ContextAPI)
   const [count,setCount] = useState(0)
   const [d,setD] = useState(null);
+  const [senderName,setSenderName] = useState(null);
 
   useEffect(() => {
     getData()
     !data && setCount(count => count+1)
 
+    getUniData();
+    !uniData && setCount(count => count+1);
     if(data){
-      setD(data.filter(data => data.hash == certifid))
+      const temp = data.filter(data => data.hash == certifid)
+      if(uniData){
+        const d2 = temp && temp.map(d => d.sender)[0]
+        const uni = uniData.filter(uni => uni.address === d2).map(uni => uni.name ? uni.name : null)
+        console.log(uni)
+        if(uni){
+          setSenderName(uni[0])
+          setD(temp.map(item => {
+            return {
+            fname: item.fname,
+            lname: item.lname,
+            s_date: item.s_date,
+            e_date: item.e_date,
+            c_name: item.c_name,
+            sender: uni[0] ? uni[0] : item.sender 
+          }
+        }))
+        }
+      }
     }
   },[count])
+
   return (
 <Fragment>
       {d && d.map(d => (
-                <Fragment>
+                <Fragment key={certifid}>
                     <Box
               sx={{
                 bgcolor: "#EFEFEF",
@@ -99,7 +120,7 @@ const CertificatesTemplate = (props) => {
                   Pellentesque tincidunt auctor pulvinar.
                 </Typography>
                   <br/>
-                <Typography><strong>Organizationid</strong> : {d.sender}</Typography>
+                <Typography><strong>Organization</strong> : {senderName && senderName ? senderName : d.sender}</Typography>
                 <Box>
                     <Button variant="outlined" color="inherit">Lorem</Button>
                     <Button variant="outlined" color="inherit">Lorem</Button>
