@@ -7,14 +7,13 @@ import { AlertTitle, Typography } from "@mui/material";
 
 const UniDetails = () => {
 
-    const {setUniName,getUniData,uniData,account,count,setCount,alert} = useContext(ContextAPI);
+    const {setUniName,getUniData,uniData,account,loading, setLoading, alert} = useContext(ContextAPI);
     const [name, setName] = useState("");
     const [nameExisted, setNameExisted] = useState(false);
     const [uniname,setuniname] = useState("")
 
     useEffect(() => {
       getUniData();
-      !uniData && setCount(count => count+1)
       if(uniData){
         const n = uniData.filter(uni => uni.address === account).map(u => u.name)[0]
         if(n){
@@ -22,7 +21,7 @@ const UniDetails = () => {
           setuniname(n)
         }
       }
-    },[count])
+    },[loading])
 
   return (
     <Fragment>

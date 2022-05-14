@@ -10,7 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const AddCertificate = (props) => {
-  const { setData, alert, account, getStudent, students,setAlert,count,setCount} =
+  const { setData, alert, account, getStudent, students,setAlert,loading,setLoading} =
     useContext(ContextAPI);
 
   const [allValues, setAllValues] = useState({
@@ -41,14 +41,13 @@ const AddCertificate = (props) => {
 
   useEffect(() => {
     getStudent();
-    !students && setCount(count => count+1)
     setAlert({
       visible: false,
       title: null,
       color: null,
       text: null,
     })
-  }, [count]);
+  }, []);
 
   return (
     <Fragment>
@@ -75,7 +74,8 @@ const AddCertificate = (props) => {
           <Box
             component="form"
             noValidate
-            onSubmit={(e) => setData(e, allValues)}
+            onSubmit={(e) => 
+              setData(e, allValues)}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>

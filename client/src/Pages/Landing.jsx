@@ -16,8 +16,8 @@ const Landing = () => {
     getData,
     verifyToken,
     data,
-    count,
-    setCount,
+    loading,
+    setLoading,
     alert,
     setAlert
   } = useContext(ContextAPI);
@@ -26,14 +26,13 @@ const Landing = () => {
 
   useEffect(() => {
     getData();
-    !data && setCount(count => count+1)
     setAlert({
       visible: false,
       title: null,
       color: null,
       text: null,
     });
-  }, [count]);
+  }, [loading]);
 
   return (
     <Fragment>

@@ -1,27 +1,14 @@
 import React,{useContext,useEffect,useState} from "react";
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Skeleton from "@mui/material/Skeleton";
 import Chip from "@mui/material/Chip";
 import DoneIcon from "@mui/icons-material/Done";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import Avatar from "@mui/material/Avatar";
 import { ContextAPI } from "../Middlewares/ContextAPI";
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
 
 const CardTemplate = ({
   c_name,
@@ -35,31 +22,26 @@ const CardTemplate = ({
   studentid
 }) => {
 
-  const {uniData,getUniData,count,setCount,getStudent,students} = useContext(ContextAPI)
+  const {uniData,getUniData,loading, setLoading,getStudent,students} = useContext(ContextAPI)
 
   const [senderName,setSenderName] = useState(null);
   const [st,setSt] = useState(null);
 
   useEffect(() => {
-    getUniData()
-    !uniData && setCount(count => count+1);
     if(uniData){
       const uni = uniData.filter(uni => uni.address === sender).map(uni => uni.name ? uni.name : null)
       if(uni){
         setSenderName(uni[0])
       }
     }
-
-    getStudent();
-    !students && setCount((count) => count + 1);
+    
     if(students){
       const st = students.filter(st => st.studentid === studentid).map(st => st.studentid ? st.studentid : null)
-      console.log(st)
       if(st){
         setSt(st[0])
       }
     }
-  },[count])
+  },[])
 
   const getColor = () => { 
     return "hsl(" + 360 * Math.random() + ',' +

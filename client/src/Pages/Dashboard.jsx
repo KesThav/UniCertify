@@ -16,7 +16,8 @@ const TabsPanel = () => {
   return (
     <Fragment>
       <Box sx={{ width: "100%", typography: "body1" }}>
-        <TabContext value={value}>
+        <Box>
+        <TabContext value={value} >
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList aria-label="lab API tabs example">
               <Tab label="Add student" value="1" onClick={() => setValue("1")}/>
@@ -28,6 +29,7 @@ const TabsPanel = () => {
           <TabPanel value="2"><AddCertificate/></TabPanel>
           <TabPanel value="3"><UniDetails/></TabPanel>
         </TabContext>
+        </Box>
       </Box>
     </Fragment>
   );

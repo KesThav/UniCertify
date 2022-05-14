@@ -11,7 +11,6 @@ import logo from "../img/logo.png";
 import { ContextAPI } from "../Middlewares/ContextAPI";
 
 const ButtonAppBar = (props) => {
-  const { logged, setLogged, account } = useContext(ContextAPI);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

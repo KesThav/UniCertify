@@ -8,21 +8,18 @@ import themeSheet from "./util/theme";
 import { ContextAPI } from "./Middlewares/ContextAPI";
 import { Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing";
-import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "./Components/Navbar";
 import CertificatesTemplate from "./Pages/CertificatesPage";
 import Footer from "./Components/footer";
-import addCertificate from "./Pages/addCertificate";
 import crypto from "crypto";
 import Certificateslist from "./Pages/Certificateslist";
-import Login from "./Pages/login";
 import Dashboard from './Pages/Dashboard'
 
 const theme = createTheme(themeSheet);
 
 const App = (props) => {
   const [web3, setWeb3] = useState(null);
-  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState(null);
   const [networkId, setNetwork] = useState(null);
   const [myContract, setContract] = useState(null);
@@ -38,15 +35,16 @@ const App = (props) => {
 
 
   const [uniData, updateUniData] = useState(null);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     detectEthereumProvider()
       .then((result) => setWeb3(new Web3(result)))
       .catch((err) => console.log(err));
 
-    !web3 && setCount((count) => count + 1);
-    !networkId && setCount((count) => count + 1);
-    !MyCertificates && setCount((count) => count + 1);
+      !web3 && setCount((count) => count + 1);
+      !networkId && setCount((count) => count + 1);
+      !MyCertificates && setCount((count) => count + 1);
 
     if (web3) {
       web3.eth.requestAccounts().then((account) => setAccount(account[0]));
@@ -81,8 +79,9 @@ const App = (props) => {
   }; */
 
   const setData = (e, values) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
+      setLoading(true)
       if (
         !values.s_date ||
         !values.e_date ||
@@ -97,6 +96,7 @@ const App = (props) => {
           color: "error",
           text: "Fill the form as required.",
         });
+        setLoading(false);
       } else {
         setAlert({
           visible: true,
@@ -109,7 +109,6 @@ const App = (props) => {
           .createHash("sha256")
           .update(values.fname + values.lname + num + values.s_date + values.e_date + values.studentid)
           .digest("hex");
-        console.log(values, hash);
         if (myContract) {
           myContract.methods
             .addCert(
@@ -131,7 +130,7 @@ const App = (props) => {
               })
             );
         }
-        setCount(count => count+1)
+        setLoading(false)
       }
     } catch (error) {
       setAlert({
@@ -140,12 +139,14 @@ const App = (props) => {
         color: "error",
         text: error.message,
       });
+      setLoading(false)
     }
   };
 
   const setStudent = (e, values) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
+      setLoading(true)
       if (
         !values.fname ||
         !values.lname ||
@@ -157,6 +158,7 @@ const App = (props) => {
           color: "error",
           text: "Fill the form as required.",
         });
+        setLoading(false)
       } else {
         setAlert({
           visible: true,
@@ -181,7 +183,7 @@ const App = (props) => {
               })
             );
         }
-        setCount(count => count+1)
+        setLoading(false)
       }
       
     } catch (error) {
@@ -191,6 +193,7 @@ const App = (props) => {
         color: "error",
         text: error.message,
       });
+      setLoading(false)
     }
   };
 
@@ -198,6 +201,7 @@ const App = (props) => {
     let temp = [];
     if (web3 && myContract) {
       try {
+        setLoading(true)
         let res = await myContract.methods.getCert().call();
         res &&
           res.forEach((item) => {
@@ -214,8 +218,10 @@ const App = (props) => {
             });
             updateData(temp);
           });
+          setLoading(false)
       } catch (error) {
         console.log(error.message);
+        setLoading(false)
       }
     }
   };
@@ -224,6 +230,7 @@ const App = (props) => {
     let temp = [];
     if (web3 && myContract) {
       try {
+        setLoading(true)
         let res = await myContract.methods.getStudents().call();
         res &&
           res.forEach((item) => {
@@ -235,8 +242,10 @@ const App = (props) => {
             });
             updateStudents(temp);
           });
+        setLoading(false);
       } catch (error) {
         console.log(error.message);
+        setLoading(false);
       }
     }
   };
@@ -290,6 +299,7 @@ const App = (props) => {
     let temp = [];
     if (web3 && myContract) {
       try {
+        setLoading(true);
         let res = await myContract.methods.getUniNames().call();
         res &&
           res.forEach((item) => {
@@ -300,15 +310,18 @@ const App = (props) => {
             });
             updateUniData(temp);
           });
+        setLoading(false)
       } catch (error) {
         console.log(error.message);
+        setLoading(false)
       }
     }
   }
 
   const setUniName = async (e,uniName) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
+      setLoading(true)
       if (
         !uniName
       ) {
@@ -318,6 +331,7 @@ const App = (props) => {
           color: "error",
           text: "Fill the form as required.",
         });
+        setLoading(false)
       } else {
         setAlert({
           visible: true,
@@ -338,9 +352,9 @@ const App = (props) => {
                 color: "success",
                 text: `uniName added successfully !`,
               })
-            ).then(res => setCount(count => count+1));
+            );
         }
-        
+        setLoading(false)
       }
     } catch (error) {
       setAlert({
@@ -349,6 +363,7 @@ const App = (props) => {
         color: "error",
         text: error.message,
       });
+      setLoading(false)
     }
   }
 
@@ -358,8 +373,8 @@ const App = (props) => {
         value={{
           getData,
           data,
-          count,
-          setCount,
+          loading,
+          setLoading,
           alert,
           setAlert,
           setData,
@@ -383,7 +398,6 @@ const App = (props) => {
             path="/details/certificates/:certifid"
             element={<CertificatesTemplate />}
           />
-          <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
       </ContextAPI.Provider>

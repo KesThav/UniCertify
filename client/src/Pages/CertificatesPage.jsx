@@ -7,10 +7,10 @@ import { ContextAPI } from "../Middlewares/ContextAPI";
 const CertificatesTemplate = (props) => {
   let { certifid } = useParams();
 
-  const {getData,data,getUniData,uniData} = useContext(ContextAPI)
-  const [count,setCount] = useState(0)
+  const {getData,data,getUniData,uniData,loading,setLoading} = useContext(ContextAPI)
   const [d,setD] = useState(null);
   const [senderName,setSenderName] = useState(null);
+  const [count,setCount] = useState(0)
 
   useEffect(() => {
     getData()

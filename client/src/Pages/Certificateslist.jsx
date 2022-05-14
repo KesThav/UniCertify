@@ -4,23 +4,20 @@ import Card from "../Components/Card";
 import { Typography } from "@mui/material";
 
 const Certificates = (props) => {
-  const { getData, data,getUniData,uniData,getStudent,students} = useContext(ContextAPI);
-  const [count, setCount] = useState(0);
+  const { getData, data,getUniData,uniData,getStudent,students,loading,setLoading} = useContext(ContextAPI);
 
   useEffect(() => {
     getData();
     getUniData();
     getStudent();
-    !data && setCount((count) => count + 1);
-    !uniData && setCount((count) => count + 1);
-    !students && setCount((count) => count + 1);
-  }, [count]);
+  }, []);
 
   return (
     <Fragment>
       <Typography variant="h3" sx={{fontFamily: "Segoe UI", fontWeight: "bold",margin: "10px 10px"}}>All certificates</Typography>
       <div style={{display: "flex", flexDirection: "row",flex: 1,  flexWrap: "wrap"}}>
-        {!data ? (
+        {!data ?
+          (
           <h3>Loading...</h3>
         ) : (
           data && data.length == 0 ? 
@@ -29,6 +26,8 @@ const Certificates = (props) => {
           data.length != 0 &&
           data.map((item) => (
             <Card
+            uniData={uniData}
+            students={students}
             expired={item.expired}
               key={item.hash}
               fname={item.fname}
