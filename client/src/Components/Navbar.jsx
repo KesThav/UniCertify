@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import logo from "../img/logo.png";
 import { ContextAPI } from "../Middlewares/ContextAPI";
 
 const ButtonAppBar = (props) => {
@@ -16,7 +15,8 @@ const ButtonAppBar = (props) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="sticky"
-        sx={{ bgcolor: "#FAFAFA", boxShadow: "none", maxHeight: "100px" }}
+        color="transparent"
+        sx={{  boxShadow: "none", maxHeight: "100px", zIndex:10 }}
       >
         <Toolbar>
           <Box
@@ -37,13 +37,6 @@ const ButtonAppBar = (props) => {
                 justifyContent: "space-between",
               }}
             >
-              {/*<img
-                src={logo}
-                style={{
-                  maxHeight: "20px",
-                  display: "block",
-                }}
-              />*/}
               <Link
                 to="/"
                 style={{

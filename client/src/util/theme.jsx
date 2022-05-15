@@ -18,7 +18,7 @@ const theme = {
               },
             },
             {
-              props: { color: 'secondary' },
+              props: { color: 'secondary',variant:"contained" },
               style: {
                 boxShadow: "none",
                 backgroundColor: "#256e96",
@@ -27,6 +27,12 @@ const theme = {
                 "&:hover":{
                     backgroundColor: "#899966"
                 }
+              },
+            },
+            {
+              props: { color: 'primary' },
+              style: {
+                boxShadow: "none",
               },
             },
             {

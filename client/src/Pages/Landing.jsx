@@ -7,8 +7,8 @@ import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import { AlertTitle } from "@mui/material";
 import { ContextAPI } from "../Middlewares/ContextAPI";
-import logo from "../img/logo.png";
-import Stack from '@mui/material/Stack';
+import Stack from "@mui/material/Stack";
+import Background from "../img/background.jpg";
 
 const Landing = () => {
   const {
@@ -19,7 +19,7 @@ const Landing = () => {
     loading,
     setLoading,
     alert,
-    setAlert
+    setAlert,
   } = useContext(ContextAPI);
 
   const [tokenid, setTokenId] = useState("");
@@ -32,73 +32,103 @@ const Landing = () => {
       color: null,
       text: null,
     });
-  }, [loading]);
+  }, []);
 
   return (
     <Fragment>
-      <Container
-        component="main"
-        maxWidth="sm"
-        sx={{ width: "100vw", height: "80vh", display: "flex", width: "100%" }}
+      <div
+        style={{
+          zIndex: -1,
+          width: "100vw",
+          height: "100vh",
+          backgroundImage: `url(${Background})`,
+          backgroundSize: "cover",
+        }}
       >
-        <Box
+        <Container
+          component="main"
+          maxWidth="md"
           sx={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
             width: "100%",
+            justifyContent: "center",
+            height: "100%",
+            alignItems:"center"
           }}
         >
-          {/*<img
-            src={logo}
-            style={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
-          />*/}
-          <Typography component="h2" variant="h2" 
-          sx={{
-        fontFamily: 'Segoe UI',
-        fontWeight: 'bold'
-      }}>
-            Enter token
-          </Typography>
           <Box
-            component="form"
-            noValidate
-            onSubmit={(e) => verifyToken(e,tokenid)}
-            sx={{ width: "100%" }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              background:"white",
+              padding : "20px",
+              height:"400px",
+              borderRadius: '1%'
+            }}
           >
-            <TextField
-              onChange={(e) => setTokenId(e.target.value)}
-              value={tokenid}
-              required
-              fullWidth
-              placeholder="Name"
-              sx={{ marginBottom: "10px" }}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
+            <Box sx={{ width: "100%"}}>
+              <Typography
+                component="h1"
+                variant="h1"
+                sx={{
+                  fontFamily: "Segoe UI",
+                  fontWeight: "bold",
+                }}
+              >
+                Unicertify.
+              </Typography>
+              <Box
+                sx={{
+                  textAlign: "right",
+                  paddingTop: "20px",
+                  paddingBottom: "20px",
+                }}
+              >
+                <Typography variant="h4">
+                  The best place to verify students' token.
+                </Typography>
+              </Box>
+            </Box>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={(e) => verifyToken(e, tokenid)}
+              sx={{ width: "100%" }}
             >
-              Verify
-            </Button>
+              <TextField
+                onChange={(e) => setTokenId(e.target.value)}
+                value={tokenid}
+                required
+                fullWidth
+                placeholder="Name"
+                sx={{ marginBottom: "10px" }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+              >
+                Verify
+              </Button>
+            </Box>
+            {alert.visible && (
+              <Stack sx={{ width: "100%" }} spacing={2}>
+                <Alert severity={alert.color}>
+                  <AlertTitle>
+                    <strong>{alert.title}</strong>
+                  </AlertTitle>
+
+                  {alert.text}
+                </Alert>
+              </Stack>
+            )}
           </Box>
-          {alert.visible && (
-            <Stack sx={{ width: '100%' }} spacing={2}>
-                        <Alert severity={alert.color}>
-            <AlertTitle >
-              <strong>{alert.title}</strong>
-            </AlertTitle>
-
-              {alert.text}
-
-          </Alert>
-            </Stack>
-
-        )}
-        </Box>
-      </Container>
+        </Container>
+      </div>
     </Fragment>
   );
 };

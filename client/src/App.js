@@ -10,9 +10,7 @@ import { Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing";
 import Navbar from "./Components/Navbar";
 import CertificatesTemplate from "./Pages/CertificatesPage";
-import Footer from "./Components/footer";
 import crypto from "crypto";
-import Certificateslist from "./Pages/Certificateslist";
 import Dashboard from './Pages/Dashboard'
 
 const theme = createTheme(themeSheet);
@@ -63,20 +61,6 @@ const App = (props) => {
     }
   }, [count]);
 
-  /*   const setData = (e) => {
-    e.preventDefault();
-    console.log(e, name, surname);
-    if (myContract) {
-      setAlert({ visible: true, color: "info", text: "Sending data..." });
-      myContract.methods
-        .addData(name, surname)
-        .send({ from: account })
-        .then((result) => console.log(result))
-        .then((res) =>
-          setAlert({ visible: true, color: "success", text: "Data sended !" })
-        );
-    }
-  }; */
 
   const setData = (e, values) => {
     e.preventDefault();
@@ -304,7 +288,7 @@ const App = (props) => {
         res &&
           res.forEach((item) => {
             temp.push({
-              address: item.uni,
+              sender: item.uni,
               name: item.name,
               registered: true
             });
@@ -389,17 +373,16 @@ const App = (props) => {
           uniData
         }}
       >
-        <Navbar />
+        {/*<Navbar />*/}
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/certificates" element={<Certificateslist />} />
           <Route
             path="/details/certificates/:certifid"
             element={<CertificatesTemplate />}
           />
         </Routes>
-        <Footer />
+        {/*<Footer />*/}
       </ContextAPI.Provider>
     </ThemeProvider>
   );
