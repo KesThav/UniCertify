@@ -43,8 +43,8 @@ const CertificateComp = ({ data, uniData }) => {
     fname: "",
     lname: "",
     studentid: "",
-    s_date: new Date(parseInt("1990-01-01")).toDateString(),
-    e_date: "2017-05-24",
+    s_date: new Date().toISOString().split('T')[0],
+    e_date: "2100-01-01",
     c_name: null,
   });
 
@@ -250,10 +250,6 @@ const CertificateComp = ({ data, uniData }) => {
                     onChange={(e) => handleSelectStudent(e)}
                     label="Student"
                     fullWidth
-                    SelectProps={{
-                      multiple: false,
-                      value: [],
-                    }}
                   >
                     {students &&
                       students
@@ -302,6 +298,7 @@ const CertificateComp = ({ data, uniData }) => {
                     label="Start date"
                     autoFocus
                     onChange={changeHandler}
+                    defaultValue={allValues.s_date}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -313,6 +310,7 @@ const CertificateComp = ({ data, uniData }) => {
                     label="End date"
                     name="e_date"
                     onChange={changeHandler}
+                    defaultValue={allValues.e_date}
                   />
                 </Grid>
                 <Grid item xs={12}>

@@ -220,8 +220,6 @@ const Dashboard2 = () => {
           </Box>
         </DialogContent>
       </Dialog>
-
-      {console.log(newname)}
     </Fragment>
   );
 };
