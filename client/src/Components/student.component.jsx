@@ -109,7 +109,7 @@ const StudentComp = ({ st, uniData,count,setCount }) => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead sx={{ boxShadow: "none" }}>
-            <TableRow sx={{ bgcolor: "#C2C3C6" }}>
+            <TableRow sx={{bgcolor:"#37304A"}}>
               {[
                 "First name",
                 "Last name",
@@ -117,7 +117,7 @@ const StudentComp = ({ st, uniData,count,setCount }) => {
                 "University",
                 "Action",
               ].map((title, index) => (
-                <TableCell key={index}>
+                <TableCell key={index} sx={{color:"white"}}>
                   <b>{title}</b>
                 </TableCell>
               ))}
@@ -126,7 +126,7 @@ const StudentComp = ({ st, uniData,count,setCount }) => {
           <TableBody>
             {st ? (
               st.slice(lowbound,upbound).map((student,index) => (
-                <TableRow key={index}>
+                <TableRow key={index} sx={{background: index % 2 && "#F5F5F5", '&:hover':{background:"#F5F5F5"}}}>
                   <TableCell>{student.fname}</TableCell>
                   <TableCell>{student.lname}</TableCell>
                   <TableCell>{student.studentid}</TableCell>

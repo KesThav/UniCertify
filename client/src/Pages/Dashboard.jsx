@@ -13,17 +13,35 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { TextField, Grid, Box,Dialog,DialogTitle,DialogContent,DialogContentText} from "@mui/material";
+import {
+  TextField,
+  Grid,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+} from "@mui/material";
 
 const Dashboard2 = () => {
   const [id, setId] = useState(1);
-  const { students, getStudent, loading, getUniData, uniData, getData, data,alert,account,setUniName } =
-  useContext(ContextAPI);
+  const {
+    students,
+    getStudent,
+    loading,
+    getUniData,
+    uniData,
+    getData,
+    data,
+    alert,
+    account,
+    setUniName,
+  } = useContext(ContextAPI);
   const [count, setCount] = useState(0);
-  const [name,setName] = useState(null);
-  const [newname, setNewName] = useState("")
+  const [name, setName] = useState(null);
+  const [newname, setNewName] = useState("");
   const [open, setOpen] = useState(false);
-  const [isActive,setIsActive] = useState(1)
+  const [isActive, setIsActive] = useState(1);
 
   useEffect(() => {
     getStudent();
@@ -34,12 +52,12 @@ const Dashboard2 = () => {
     !uniData && setCount((count) => count + 1);
     !data && setCount((count) => count + 1);
 
-    if(uniData){
-      setName(uniData.filter(u => u.sender === account).map(u => u.name)[0])
+    if (uniData) {
+      setName(
+        uniData.filter((u) => u.sender === account).map((u) => u.name)[0]
+      );
     }
-
-
-  }, [count,alert]);
+  }, [count, alert]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -59,17 +77,17 @@ const Dashboard2 = () => {
             <ListItem disablePadding onClick={() => setId(1)}>
               <ListItemButton>
                 <ListItemIcon>
-                  <SchoolIcon />
+                  <HowToRegIcon />
                 </ListItemIcon>
-                <ListItemText primary={"Students"} />
+                <ListItemText primary={"Certificates"} />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding onClick={() => setId(2)}>
               <ListItemButton>
                 <ListItemIcon>
-                  <HowToRegIcon />
+                  <SchoolIcon />
                 </ListItemIcon>
-                <ListItemText primary={"Certificates"} />
+                <ListItemText primary={"Students"} />
               </ListItemButton>
             </ListItem>
           </List>
@@ -85,9 +103,18 @@ const Dashboard2 = () => {
             alignItems: "center",
           }}
         >
-          <div style={{display:"flex", width:"100%", padding: "20px",
-              boxSizing: "border-box",alignItems:"center",flexDirection:"row-reverse"}}>
-                <Avatar sx={{marginLeft:"10px"}} onClick={handleClickOpen}/>{name ? name : account}
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              padding: "20px",
+              boxSizing: "border-box",
+              alignItems: "center",
+              flexDirection: "row-reverse",
+            }}
+          >
+            <Avatar sx={{ marginLeft: "10px" }} onClick={handleClickOpen} />
+            {name ? name : account}
           </div>
           <div
             style={{
@@ -125,6 +152,9 @@ const Dashboard2 = () => {
             }}
           >
             {id === 1 && (
+              <Certificate data={data && data} uniData={uniData && uniData} />
+            )}
+            {id === 2 && (
               <Student
                 st={students && students}
                 uniData={uniData && uniData}
@@ -132,17 +162,11 @@ const Dashboard2 = () => {
                 setCount={setCount}
               />
             )}
-            {id === 2 && (
-              <Certificate
-                data={data && data}
-                uniData={uniData && uniData}
-              />
-            )}
           </div>
         </div>
       </div>
 
-            {/** dialog to update the name*/}
+      {/** dialog to update the name*/}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Change your name</DialogTitle>
         <DialogContent>
@@ -158,7 +182,6 @@ const Dashboard2 = () => {
               width: "100%",
             }}
           >
-
             <Box
               component="form"
               noValidate
@@ -186,8 +209,12 @@ const Dashboard2 = () => {
                   width: "100%",
                 }}
               >
-                <Button onClick={handleClose} variant="text" color="inherit">Cancel</Button>
-                <Button type="submit" variant="text" color="primary">Save</Button>
+                <Button onClick={handleClose} variant="text" color="inherit">
+                  Cancel
+                </Button>
+                <Button type="submit" variant="text" color="primary">
+                  Save
+                </Button>
               </Box>
             </Box>
           </Box>

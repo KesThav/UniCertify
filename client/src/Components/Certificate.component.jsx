@@ -138,18 +138,19 @@ const CertificateComp = ({ data, uniData }) => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{bgcolor:"#37304A"}}>
               {[
                 "First name",
                 "Last name",
                 "Studentid",
+                "Certificate name",
                 "Issue date",
                 "Due date",
                 "Status",
                 "University",
                 "Action",
               ].map((title, index) => (
-                <TableCell key={index}>
+                <TableCell key={index} sx={{color:"white"}}>
                   <b>{title}</b>
                 </TableCell>
               ))}
@@ -158,14 +159,15 @@ const CertificateComp = ({ data, uniData }) => {
           <TableBody>
             {data
               ? data.slice(lowbound, upbound).map((student, index) => (
-                  <TableRow key={index}>
+                  <TableRow key={index} sx={{background: index % 2 && "#F5F5F5", '&:hover':{background:"#F5F5F5"}}}>
                     <TableCell>{student.fname}</TableCell>
                     <TableCell>{student.lname}</TableCell>
                     <TableCell>{student.studentid}</TableCell>
+                    <TableCell>{student.c_name}</TableCell>
                     <TableCell>{student.s_date}</TableCell>
                     <TableCell>{student.e_date}</TableCell>
-                    <TableCell>
-                      {student.expired ? "Expired" : "Active"}
+                    <TableCell sx={{color: !student.expired ? "#00a152" : "#ab003c"}}>
+                    {student.expired ? "✗ Expired" : "✓ Active"}
                     </TableCell>
                     <TableCell>{student.sender}</TableCell>
                     <TableCell>

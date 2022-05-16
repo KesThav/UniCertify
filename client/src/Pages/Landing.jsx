@@ -23,16 +23,18 @@ const Landing = () => {
   } = useContext(ContextAPI);
 
   const [tokenid, setTokenId] = useState("");
+  const [count,setCount] = useState(0)
 
   useEffect(() => {
     getData();
+    !data && setCount(count => count+1)
     setAlert({
       visible: false,
       title: null,
       color: null,
       text: null,
     });
-  }, []);
+  }, [count]);
 
   return (
     <Fragment>
@@ -41,7 +43,7 @@ const Landing = () => {
           zIndex: -1,
           width: "100vw",
           height: "100vh",
-          backgroundImage: `url(${Background})`,
+          backgroundImage: `linear-gradient(#00000033,#000000cc),url(${Background})`,
           backgroundSize: "cover",
         }}
       >
@@ -63,7 +65,6 @@ const Landing = () => {
               alignItems: "center",
               justifyContent: "center",
               width: "100%",
-              background:"white",
               padding : "20px",
               height:"400px",
               borderRadius: '1%'
@@ -76,6 +77,7 @@ const Landing = () => {
                 sx={{
                   fontFamily: "Segoe UI",
                   fontWeight: "bold",
+                  color:"white"
                 }}
               >
                 Unicertify.
@@ -87,7 +89,7 @@ const Landing = () => {
                   paddingBottom: "20px",
                 }}
               >
-                <Typography variant="h4">
+                <Typography variant="h4" sx={{color:"white"}}>
                   The best place to verify students' token.
                 </Typography>
               </Box>
@@ -104,7 +106,7 @@ const Landing = () => {
                 required
                 fullWidth
                 placeholder="Name"
-                sx={{ marginBottom: "10px" }}
+                sx={{ marginBottom: "10px",bgcolor:"white" }}
               />
               <Button
                 type="submit"
