@@ -49,8 +49,8 @@ const StudentComp = ({ st, uniData,count,setCount }) => {
   if (st && uniData) {
     for (let i = 0; i < st.length; i++) {
       for (let j = 0; j < uniData.length; j++) {
-        if (st[j].sender === uniData[j].sender) {
-          st[j].sender = uniData[j].name;
+        if (st[i].sender === uniData[j].sender) {
+          st[i].sender = uniData[j].name;
         }
       }
     }

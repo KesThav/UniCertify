@@ -107,8 +107,8 @@ const CertificateComp = ({ data, uniData }) => {
   if (data && uniData) {
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < uniData.length; j++) {
-        if (data[j].sender === uniData[j].sender) {
-          data[j].sender = uniData[j].name;
+        if (data[i].sender === uniData[j].sender) {
+          data[i].sender = uniData[j].name;
         }
       }
     }
@@ -184,7 +184,7 @@ const CertificateComp = ({ data, uniData }) => {
                     </TableCell>
                   </TableRow>
                 ))
-              : "No data found"}
+              : <Typography variant="h5">No data found</Typography>}
           </TableBody>
         </Table>
       </TableContainer>

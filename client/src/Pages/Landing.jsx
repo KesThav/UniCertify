@@ -23,7 +23,7 @@ const Landing = () => {
   } = useContext(ContextAPI);
 
   const [tokenid, setTokenId] = useState("");
-  const [count,setCount] = useState(0)
+  const [count,setCount] = useState(0);
 
   useEffect(() => {
     getData();
@@ -34,6 +34,7 @@ const Landing = () => {
       color: null,
       text: null,
     });
+
   }, [count]);
 
   return (
