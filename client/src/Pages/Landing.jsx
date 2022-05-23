@@ -106,7 +106,7 @@ const Landing = () => {
                 value={tokenid}
                 required
                 fullWidth
-                placeholder="Name"
+                placeholder="Token"
                 sx={{ marginBottom: "10px",bgcolor:"white" }}
               />
               <Button
