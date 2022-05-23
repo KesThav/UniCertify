@@ -193,8 +193,8 @@ const App = (props) => {
               fname: item.fname,
               lname: item.lname,
               c_name: item.certName,
-              s_date: [new Date(parseInt(item.startdate)).getDate(),new Date(parseInt(item.startdate)).getMonth(),new Date(parseInt(item.startdate)).getFullYear()].join('/'),
-              e_date: [new Date(parseInt(item.enddate)).getDate(),new Date(parseInt(item.enddate)).getMonth(),new Date(parseInt(item.enddate)).getFullYear()].join('/'),
+              s_date: [new Date(parseInt(item.startdate)).getDate(),(new Date(parseInt(item.startdate)).getMonth()+1),new Date(parseInt(item.startdate)).getFullYear()].join('/'),
+              e_date: [new Date(parseInt(item.enddate)).getDate(),(new Date(parseInt(item.enddate)).getMonth()+1),new Date(parseInt(item.enddate)).getFullYear()].join('/'),
               hash: item.hash,
               sender: item.uni,
               studentid: item.studentid,
@@ -238,7 +238,7 @@ const App = (props) => {
     e.preventDefault();
     if (data) {
       const exist = data.filter((data) => data.hash === tokenid)
-      if (exist.length != 0) {
+      if (exist.length !== 0) {
         let expired = exist.map(value=> value.expired)[0]
         console.log(exist)
         if(expired){
