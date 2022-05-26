@@ -20,31 +20,44 @@ import {
   Alert,
   AlertTitle,
   Pagination,
-  Stack
+  Stack,
+  MenuItem
 } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DoneIcon from '@mui/icons-material/Done';
+import CloseIcon from '@mui/icons-material/Close';
 
-const Roles = ({ rl ,r,uniData}) => {
+const Roles = ({ ur, r, uniData }) => {
   const {
     roles,
-    setRoles,
     getRoles,
-    getUserAndRoles,
-    userAndRoles,
+    getUsersAndRoles,
+    usersAndRoles,
     alert,
     setAlert,
     createRole,
     getUniName,
+    grantRole
   } = useContext(ContextAPI);
 
   const [page, setPage] = useState(1);
   const [lowbound, setLowbound] = useState(0);
   const [upbound, setUpbound] = useState(5);
   const [open, setOpen] = useState(false);
-  const [newrole,setNewRole] = useState("");
+  const [newrole, setNewRole] = useState("");
+  const [editing, setEditing] = useState(false);
 
+  if (ur && uniData) {
+    for (let i = 0; i < ur.length; i++) {
+      for (let j = 0; j < uniData.length; j++) {
+        if (ur[i].user === uniData[j].sender) {
+          ur[i].name = uniData[j].name;
+        }
+      }
+    }
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -61,9 +74,9 @@ const Roles = ({ rl ,r,uniData}) => {
   };
 
   const pageNumber = () => {
-    return rl && rl.length !== 0 && rl.length / 5 > Math.round(rl.length / 5)
-      ? Math.round(rl.length / 5 + 1)
-      : Math.round(rl.length / 5);
+    return ur && ur.length !== 0 && ur.length / 5 > Math.round(ur.length / 5)
+      ? Math.round(ur.length / 5 + 1)
+      : Math.round(ur.length / 5);
   };
 
   const handlePageChange = (event, value) => {
@@ -97,10 +110,7 @@ const Roles = ({ rl ,r,uniData}) => {
         <Table>
           <TableHead sx={{ boxShadow: "none" }}>
             <TableRow sx={{ bgcolor: "#37304A" }}>
-              {[
-                "User",
-                "Role"
-              ].map((title, index) => (
+              {["User","Adress", "Role","Actions"].map((title, index) => (
                 <TableCell key={index} sx={{ color: "white" }}>
                   <b>{title}</b>
                 </TableCell>
@@ -108,10 +118,60 @@ const Roles = ({ rl ,r,uniData}) => {
             </TableRow>
           </TableHead>
           <TableBody>
-                {rl ? rl.map(rl => (
-                <TableRow><TableCell>{rl.user}</TableCell>
-                <TableCell>{rl.role}</TableCell></TableRow>))
-             : (
+            {ur ? (
+              ur.map((ur, index) => (
+                <TableRow key={ur.user}>
+                  <TableCell>{ur.name}</TableCell>
+                  <TableCell>{ur.user}</TableCell>
+                  <TableCell>
+                    {editing ? 
+                    <TextField
+                    required
+                    variant="standard"
+                    id="student"
+                    select
+                    value={newrole.value}
+                    onChange={(e) => setNewRole({user: ur.user, role: e.target.value})}
+                    label="Role"
+                    fullWidth
+                  >
+                    {r &&
+                      r.map((r,index) => (
+                          <MenuItem
+                            key={index}
+                            value={r}
+                          >
+                            {r}
+                          </MenuItem>
+                        ))}
+                  </TextField> :
+                     ur.role}</TableCell>
+                  <TableCell>
+                    {editing ? (
+                      <Fragment>
+                      <DoneIcon onClick={(e) => {
+                        console.log(newrole);
+                        grantRole(e,newrole);
+                        setEditing(false);}}
+                      />
+                      <CloseIcon onClick={() => {
+                        setEditing(false);
+                        setNewRole(null);
+                      }}/>
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <EditIcon onClick={() => {
+                          setEditing(true)
+                          setNewRole({user: ur.user, role: ur.role})
+                          console.log(newrole)}}/>
+                        <DeleteIcon />
+                      </Fragment>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
               <Typography variant="h5">No data found</Typography>
             )}
           </TableBody>
@@ -125,9 +185,9 @@ const Roles = ({ rl ,r,uniData}) => {
           flexDirection: "row-reverse",
         }}
       >
-        {rl && (
+        {ur && (
           <Pagination
-            count={rl && pageNumber()}
+            count={ur && pageNumber()}
             page={page}
             onChange={handlePageChange}
           />
@@ -164,7 +224,7 @@ const Roles = ({ rl ,r,uniData}) => {
             <Box
               component="form"
               noValidate
-              onSubmit={(e) => createRole(e,newrole)}
+              onSubmit={(e) => createRole(e, newrole)}
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>

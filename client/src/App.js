@@ -34,6 +34,8 @@ const App = (props) => {
 
   const [uniData, updateUniData] = useState(null);
   const [count, setCount] = useState(0);
+  const [roles,setRoles] = useState(null);
+  const [usersAndRoles,setUsersAndRoles] = useState(null);
 
   useEffect(() => {
     detectEthereumProvider()
@@ -62,6 +64,7 @@ const App = (props) => {
   }, [count]);
 
 
+  //-----------------------------------------------------------certificates-----------------------------------------------------------
   const setData = (e, values) => {
     e.preventDefault();
     try {
@@ -127,6 +130,82 @@ const App = (props) => {
     }
   };
 
+  const getData = async (e) => {
+    let temp = [];
+    if (web3 && myContract) {
+      try {
+        setLoading(true)
+        let res = await myContract.methods.getCert().call();
+        res &&
+          res.forEach((item) => {
+            temp.push({
+              fname: item.fname,
+              lname: item.lname,
+              c_name: item.certName,
+              s_date: [new Date(parseInt(item.startdate)).getDate(),(new Date(parseInt(item.startdate)).getMonth()+1),new Date(parseInt(item.startdate)).getFullYear()].join('/'),
+              e_date: [new Date(parseInt(item.enddate)).getDate(),(new Date(parseInt(item.enddate)).getMonth()+1),new Date(parseInt(item.enddate)).getFullYear()].join('/'),
+              hash: item.hash,
+              sender: item.uni,
+              studentid: item.studentid,
+              expired: Date.parse(new Date(parseInt(item.enddate)).toDateString()) < Date.parse(new Date()) ? true : false
+            });
+            updateData(temp);
+          });
+          setLoading(false)
+      } catch (error) {
+        console.log(error.message);
+        setLoading(false)
+      }
+    }
+  };
+
+  const verifyToken = (e, tokenid) => {
+    e.preventDefault();
+    if (data) {
+      const exist = data.filter((data) => data.hash === tokenid)
+      if (exist.length !== 0) {
+        let expired = exist.map(value=> value.expired)[0]
+        console.log(exist)
+        if(expired){
+          setAlert({
+            visible: true,
+            title: "Token expired !",
+            color: "error",
+            text: "The token is no longer valid",
+          })
+        }else{
+          setAlert({
+          visible: true,
+          title: "Token valid !",
+          color: "success",
+          text: (
+            <a href={`http://localhost:3000/details/certificates/${tokenid}`}>
+              View certificate here
+            </a>
+          ),
+        });
+        }
+        
+      } else {
+        setAlert({
+          visible: true,
+          title: "Token not found",
+          color: "error",
+          text: null,
+        });
+      }
+    } else {
+      setAlert({
+        visible: true,
+        title: "Token not found",
+        color: "error",
+        text: null,
+      });
+    }
+  };
+
+
+  //-----------------------------------------------------------students-----------------------------------------------------------
   const setStudent = (e, values) => {
     e.preventDefault();
     try {
@@ -181,34 +260,6 @@ const App = (props) => {
     }
   };
 
-  const getData = async (e) => {
-    let temp = [];
-    if (web3 && myContract) {
-      try {
-        setLoading(true)
-        let res = await myContract.methods.getCert().call();
-        res &&
-          res.forEach((item) => {
-            temp.push({
-              fname: item.fname,
-              lname: item.lname,
-              c_name: item.certName,
-              s_date: [new Date(parseInt(item.startdate)).getDate(),(new Date(parseInt(item.startdate)).getMonth()+1),new Date(parseInt(item.startdate)).getFullYear()].join('/'),
-              e_date: [new Date(parseInt(item.enddate)).getDate(),(new Date(parseInt(item.enddate)).getMonth()+1),new Date(parseInt(item.enddate)).getFullYear()].join('/'),
-              hash: item.hash,
-              sender: item.uni,
-              studentid: item.studentid,
-              expired: Date.parse(new Date(parseInt(item.enddate)).toDateString()) < Date.parse(new Date()) ? true : false
-            });
-            updateData(temp);
-          });
-          setLoading(false)
-      } catch (error) {
-        console.log(error.message);
-        setLoading(false)
-      }
-    }
-  };
 
   const getStudent = async (e) => {
     let temp = [];
@@ -234,51 +285,9 @@ const App = (props) => {
     }
   };
 
-  const verifyToken = (e, tokenid) => {
-    e.preventDefault();
-    if (data) {
-      const exist = data.filter((data) => data.hash === tokenid)
-      if (exist.length !== 0) {
-        let expired = exist.map(value=> value.expired)[0]
-        console.log(exist)
-        if(expired){
-          setAlert({
-            visible: true,
-            title: "Token expired !",
-            color: "error",
-            text: "The token is no longer valid",
-          })
-        }else{
-          setAlert({
-          visible: true,
-          title: "Token valid !",
-          color: "success",
-          text: (
-            <a href={`http://localhost:3000/details/certificates/${tokenid}`}>
-              View certificate here
-            </a>
-          ),
-        });
-        }
-        
-      } else {
-        setAlert({
-          visible: true,
-          title: "Token not found",
-          color: "error",
-          text: null,
-        });
-      }
-    } else {
-      setAlert({
-        visible: true,
-        title: "Token not found",
-        color: "error",
-        text: null,
-      });
-    }
-  };
+  
 
+  //-----------------------------------------------------------University-----------------------------------------------------------
   const getUniData = async () => {
     let temp = [];
     if (web3 && myContract) {
@@ -351,6 +360,91 @@ const App = (props) => {
     }
   }
 
+  //-----------------------------------------------------------Roles-----------------------------------------------------------
+  const getRoles = async () => {
+    if (web3 && myContract) {
+    try {
+      setLoading(true);
+      let res = await myContract.methods.getRoles().call();
+      res && setRoles(res);
+      setLoading(false)
+    }catch(error){
+      console.log(error.message)
+      setLoading(false);
+    }
+  }
+  }
+  
+  const getUsersAndRoles = async () => {
+    let temp = []
+    if (web3 && myContract) {
+    try {
+      setLoading(true);
+      let res = await myContract.methods.getUsersAndRoles().call();
+      res &&
+        res.forEach((item) => {
+          temp.push({
+            user: item.user,
+            role: item.role
+          });
+          setUsersAndRoles(temp);
+        });
+      setLoading(false)
+    }catch(error){
+      console.log(error.message)
+      setLoading(false);
+    }
+  }
+  }
+
+  const createRole = (e,newrole) => {
+    e.preventDefault();
+    try{
+      if (myContract) {
+        setLoading(true);
+        myContract.methods
+          .createRole(
+            newrole
+          )
+          .send({ from: account })
+          .then(result =>               
+            setAlert({
+            visible: true,
+            title: "Role created !",
+            color: "success",
+            text: `Role created successfully !`,
+          }))
+      }
+    }catch(error){
+      console.log(error.message)
+    }
+  }
+
+  const grantRole = (e,newrole) => {
+    e.preventDefault();
+    try{
+      if (myContract) {
+        setLoading(true);
+        myContract.methods
+          .grantRole(
+            newrole.user,
+            newrole.role
+          )
+          .send({ from: account })
+          .then(result =>               
+            setAlert({
+            visible: true,
+            title: "Role created !",
+            color: "success",
+            text: `Role created successfully !`,
+          }))
+      }
+    }catch(error){
+      console.log(error.message)
+    }
+  }
+
+
   return (
     <ThemeProvider theme={theme}>
       <ContextAPI.Provider
@@ -370,7 +464,13 @@ const App = (props) => {
           myContract,
           getUniData,
           setUniName,
-          uniData
+          uniData,
+          getRoles,
+          getUsersAndRoles,
+          roles,
+          usersAndRoles,
+          createRole,
+          grantRole
         }}
       >
         {/*<Navbar />*/}

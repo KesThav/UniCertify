@@ -22,6 +22,8 @@ import {
   DialogContent,
   DialogContentText,
 } from "@mui/material";
+import RoleManagement from '../Components/Roles.component'
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 const Dashboard2 = () => {
   const [id, setId] = useState(1);
@@ -36,21 +38,28 @@ const Dashboard2 = () => {
     alert,
     account,
     setUniName,
+    getRoles,
+    getUsersAndRoles,
+    roles,
+    usersAndRoles
   } = useContext(ContextAPI);
   const [count, setCount] = useState(0);
   const [name, setName] = useState(null);
   const [newname, setNewName] = useState("");
   const [open, setOpen] = useState(false);
-  const [isActive, setIsActive] = useState(1);
 
   useEffect(() => {
     getStudent();
     getUniData();
     getData();
+    getUsersAndRoles();
+    getRoles();
 
     !students && setCount((count) => count + 1);
     !uniData && setCount((count) => count + 1);
     !data && setCount((count) => count + 1);
+    !usersAndRoles && setCount((count) => count + 1);
+    !roles && setCount((count) => count + 1);
 
     if (uniData) {
       setName(
@@ -88,6 +97,14 @@ const Dashboard2 = () => {
                   <SchoolIcon />
                 </ListItemIcon>
                 <ListItemText primary={"Students"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setId(3)}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <VerifiedIcon />
+                </ListItemIcon>
+                <ListItemText primary={"Role Management"} />
               </ListItemButton>
             </ListItem>
           </List>
@@ -162,6 +179,11 @@ const Dashboard2 = () => {
                 setCount={setCount}
               />
             )}
+            {id === 3 && 
+            <RoleManagement
+            r={roles && roles}
+            ur ={usersAndRoles && usersAndRoles} 
+            uniData={uniData && uniData}/>}
           </div>
         </div>
       </div>

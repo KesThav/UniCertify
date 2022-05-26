@@ -36,7 +36,7 @@ contract MyCertificates {
     mapping(address => MyUni) public uniNames;
     address[] addresses;
 
-    //address => role => boolean
+    //address => userRole
     event RoleEvent(string error);
 
     struct UserRole{
@@ -124,6 +124,7 @@ contract MyCertificates {
         }
         if(j == 0){
             addresses.push(msg.sender);
+            userRoles[msg.sender] = UserRole(msg.sender,"None");
         }
 
     }
