@@ -12,6 +12,7 @@ import Navbar from "./Components/Navbar";
 import CertificatesTemplate from "./Pages/CertificatesPage";
 import crypto from "crypto";
 import Dashboard from './Pages/Dashboard'
+import ProtectedRoute from "./Middlewares/ProtectedRoute";
 
 const theme = createTheme(themeSheet);
 

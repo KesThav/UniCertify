@@ -24,8 +24,9 @@ import {
 } from "@mui/material";
 import RoleManagement from '../Components/Roles.component'
 import VerifiedIcon from '@mui/icons-material/Verified';
+import ProtectedRoute from "../Middlewares/ProtectedRoute";
 
-const Dashboard2 = () => {
+const Dashboard = () => {
   const [id, setId] = useState(1);
   const {
     students,
@@ -75,8 +76,9 @@ const Dashboard2 = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  return (
+  return (      
     <Fragment>
+      <ProtectedRoute access={name && name}>
       <div
         style={{ display: "flex", flexDirection: "row", background: "#F4F5FA" }}
         id="main"
@@ -188,7 +190,7 @@ const Dashboard2 = () => {
         </div>
       </div>
 
-      {/** dialog to update the name*/}
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Change your name</DialogTitle>
         <DialogContent>
@@ -242,8 +244,9 @@ const Dashboard2 = () => {
           </Box>
         </DialogContent>
       </Dialog>
-    </Fragment>
+      </ProtectedRoute>
+    </Fragment> 
   );
 };
 
-export default Dashboard2;
+export default Dashboard;
