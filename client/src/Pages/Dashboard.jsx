@@ -156,7 +156,7 @@ const Dashboard = () => {
               icon={<HowToRegIcon sx={{ fontSize: 300 }} />}
             />
             <Widget
-              data={data && new Set(data.map((d) => d.sender)).size}
+              data={uniData && uniData.length}
               text={"Universities"}
               color={"#16B1FF"}
               icon={<HomeWorkIcon sx={{ fontSize: 300 }} />}
