@@ -1,6 +1,8 @@
 # UniCertify
 
-Unifr Project : Certify degrees using blockchain
+Unicerfity helps universities and colleges certify their students' diplomas. An institution submits a diploma on which the service issues a certificate in the form of a token. Ownership of a token can be checked publicly, thereby verifying if the person in question holds a degree considered valid by the service. 
+This service may be integrated in user profiles on the web, e.g., LinkedIn profile could show verified degrees.
+
 
 ## Setup
 
